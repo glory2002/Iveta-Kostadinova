@@ -4,3 +4,9 @@ dist
 *.local
 .env
 .env.*
+
+# Token / credential files (public repo — never commit)
+*.token
+.token
+.github-token
+github-token.txt
