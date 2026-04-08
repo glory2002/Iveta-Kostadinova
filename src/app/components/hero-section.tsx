@@ -18,12 +18,11 @@ export function HeroSection() {
       <div className="relative z-10 px-4 md:px-16 lg:px-24 max-w-7xl mx-auto w-full">
         <div className="max-w-2xl mt-32 md:mt-0">
           <h1
-            className="text-[#E8D5C4] tracking-tight mb-4 md:mb-6 leading-[0.95] text-[56px] md:text-[80px] lg:text-[96px] drop-shadow-[0_2px_28px_rgba(0,0,0,0.55)]"
-            style={{ fontFamily: 'Cormorant, serif', fontWeight: 300, letterSpacing: '-0.02em' }}
+            className="uppercase text-[#E8D5C4] mb-4 md:mb-6 leading-[0.95] tracking-tight text-[52px] md:text-[72px] lg:text-[88px] drop-shadow-[0_2px_28px_rgba(0,0,0,0.55)]"
+            style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
           >
-            Ивета
-            <br />
-            Костадинова
+            <span className="block">Ивета</span>
+            <span className="block">Костадинова</span>
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl text-white mb-6 md:mb-10 tracking-[0.2em]" style={{ fontWeight: 300 }}>
             PMU EXPERT · 2015

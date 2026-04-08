@@ -43,28 +43,37 @@ export function ServicesSection() {
           {services.map((service, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden bg-white transition-all duration-700 flex flex-col-reverse lg:flex-row"
+              className="group relative overflow-hidden rounded-2xl md:rounded-3xl shadow-md shadow-black/10 transition-all duration-700 min-h-[360px] sm:min-h-[400px] md:min-h-[440px] lg:min-h-[420px]"
             >
-              {/* Content Left Side */}
-              <div className="w-full lg:w-1/2 p-6 md:p-8 flex flex-col justify-center items-center bg-[#F5EFE7]">
-                <h3 className="text-3xl md:text-4xl text-[#3A2F2A] mb-2 md:mb-3 tracking-tight text-center" style={{ fontFamily: 'Cormorant, serif', fontWeight: 500 }}>
+              <ImageWithFallback
+                src={service.image}
+                alt={service.title}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
+              />
+              {/* Мобилно: по-висок беж за четимост на заглавията; горе снимката още се вижда */}
+              <div
+                className="pointer-events-none absolute inset-0 z-[1] lg:hidden [background:linear-gradient(to_top,rgb(245,239,231)_0%,rgba(245,239,231,0.98)_8%,rgba(245,239,231,0.93)_18%,rgba(245,239,231,0.82)_32%,rgba(245,239,231,0.62)_46%,rgba(245,239,231,0.35)_60%,rgba(245,239,231,0.12)_72%,rgba(245,239,231,0.03)_82%,transparent_92%)]"
+                aria-hidden
+              />
+              {/* Desktop: по-широк панел вляво за контраст на текста */}
+              <div
+                className="pointer-events-none absolute inset-0 z-[1] hidden lg:block [background:linear-gradient(to_right,rgb(245,239,231)_0%,rgba(245,239,231,0.97)_10%,rgba(245,239,231,0.9)_22%,rgba(245,239,231,0.75)_38%,rgba(245,239,231,0.48)_54%,rgba(245,239,231,0.22)_68%,rgba(245,239,231,0.05)_80%,transparent_88%)]"
+                aria-hidden
+              />
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] hidden h-[52%] [background:linear-gradient(to_top,rgb(245,239,231)_0%,rgba(245,239,231,0.92)_12%,rgba(245,239,231,0.68)_28%,rgba(245,239,231,0.38)_48%,rgba(245,239,231,0.12)_66%,transparent_82%)] lg:block"
+                aria-hidden
+              />
+              <div className="relative z-10 flex min-h-[360px] sm:min-h-[400px] md:min-h-[440px] lg:min-h-[420px] w-full flex-col justify-end px-6 pb-8 pt-20 md:px-8 md:pb-10 md:pt-24 lg:w-1/2 lg:justify-center lg:pb-8 lg:pt-8 lg:pl-8 lg:pr-4 items-center text-center">
+                <h3 className="text-3xl md:text-4xl text-[#3A2F2A] mb-2 md:mb-3 tracking-tight drop-shadow-sm" style={{ fontWeight: 500 }}>
                   {service.title}
                 </h3>
-                <p className="text-lg md:text-xl text-[#3D3026] tracking-[0.15em] mb-6 md:mb-8 text-center capitalize" style={{ fontWeight: 500 }}>
+                <p className="text-lg md:text-xl text-[#3D3026] tracking-[0.15em] mb-6 md:mb-8 capitalize drop-shadow-sm" style={{ fontWeight: 500 }}>
                   {service.titleEn}
                 </p>
-                <button className="bg-transparent group-hover:bg-[#3A2F2A] text-[#3A2F2A] group-hover:text-[#E8D5C4] border border-[#3A2F2A] group-hover:border-[#3A2F2A] px-6 py-3.5 md:px-8 md:py-4 text-base md:text-lg transition-all duration-300 rounded-full cursor-pointer w-full md:w-auto" style={{ fontWeight: 500, letterSpacing: '0.05em' }}>
+                <button className="border max-lg:bg-[#3A2F2A] max-lg:text-[#E8D5C4] max-lg:border-[#3A2F2A] max-lg:hover:bg-[#2A1F1A] max-lg:hover:border-[#2A1F1A] max-lg:hover:text-[#FDFBF8] lg:bg-transparent lg:text-[#3A2F2A] lg:border-[#3A2F2A] lg:group-hover:bg-[#3A2F2A] lg:group-hover:text-[#E8D5C4] lg:group-hover:border-[#3A2F2A] px-6 py-3.5 md:px-8 md:py-4 text-base md:text-lg transition-all duration-300 rounded-full cursor-pointer w-full max-w-xs md:w-auto" style={{ fontWeight: 500, letterSpacing: '0.05em' }}>
                   {service.buttonText}
                 </button>
-              </div>
-              
-              {/* Image Right Side */}
-              <div className="relative w-full lg:w-1/2 overflow-hidden h-64 md:h-80 lg:h-auto">
-                <ImageWithFallback
-                  src={service.image}
-                  alt={service.title}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
               </div>
             </div>
           ))}

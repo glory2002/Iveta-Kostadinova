@@ -7,54 +7,103 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 interface Testimonial {
   name: string;
   text: string;
+  /** Портрет за кръглата снимка; смени с реални снимки на клиенти при нужда */
+  avatar: string;
+}
+
+function testimonialInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    const a = parts[0][0] ?? '';
+    const b = parts[parts.length - 1][0] ?? '';
+    return (a + b).toUpperCase();
+  }
+  return (parts[0]?.slice(0, 2) ?? '?').toUpperCase();
 }
 
 const testimonials: Testimonial[] = [
   {
     name: 'Цвети Петрова',
-    text: 'За мен Ивета е истински професионалист. Ходила съм и при други дами, които правят микроблейдинг на вежди, нищо общо като качество и отношение. Бих се доверила само на нея занапред.'
+    text: 'За мен Ивета е истински професионалист. Ходила съм и при други дами, които правят микроблейдинг на вежди, нищо общо като качество и отношение. Бих се доверила само на нея занапред.',
+    avatar:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=face'
   },
   {
     name: 'Мария И.',
-    text: 'Невероятен резултат! Веждите ми изглеждат абсолютно естествено.'
+    text: 'Невероятен резултат! Веждите ми изглеждат абсолютно естествено.',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face'
   },
   {
     name: 'Ana D.',
-    text: 'Много съм доволна от резултата. Иве, супер си!'
+    text: 'Много съм доволна от резултата. Иве, супер си!',
+    avatar:
+      'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face'
   },
   {
     name: 'Петя Г.',
-    text: 'Процедурата беше безболезнена и резултатът надмина очакванията ми.'
+    text: 'Процедурата беше безболезнена и резултатът надмина очакванията ми.',
+    avatar:
+      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&h=200&fit=crop&crop=face'
   },
   {
     name: 'Силвия К.',
-    text: 'Перфектни вежди без да губя време всяка сутрин!'
+    text: 'Перфектни вежди без да губя време всяка сутрин!',
+    avatar:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face'
   },
   {
     name: 'Десислава Т.',
-    text: 'Отлична корекция. Елена работи прецизно и с голямо внимание.'
+    text: 'Отлична корекция. Елена работи прецизно и с голямо внимание.',
+    avatar:
+      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face'
   }
 ];
 
 function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const initials = testimonialInitials(testimonial.name);
+
   return (
-    <div className="bg-[#F5EFE7]/30 p-6 md:p-10 transition-all duration-500 hover:-translate-y-2 h-full flex flex-col min-h-[280px] md:min-h-[420px]">
+    <div className="rounded-2xl md:rounded-3xl bg-[#F5EFE7]/30 p-6 md:p-10 transition-all duration-500 hover:-translate-y-2 h-full flex flex-col min-h-[280px] md:min-h-[420px]">
       <div
         className="text-5xl md:text-7xl text-[#C9A882]/30 mb-2 leading-none -mt-2"
-        style={{ fontFamily: 'Cormorant, serif', fontWeight: 300 }}
+        style={{ fontWeight: 300 }}
       >
         {'\u201C'}
       </div>
       <p
         className="text-[#3D3026] mb-6 md:mb-8 leading-relaxed text-lg md:text-xl flex-grow"
-        style={{ fontWeight: 300, fontFamily: 'Cormorant, serif' }}
+        style={{ fontWeight: 300 }}
       >
         {testimonial.text}
       </p>
-      <p className="text-[#8B7355] text-sm md:text-base tracking-wide" style={{ fontWeight: 500 }}>
-        <span style={{ fontWeight: 600 }}>{testimonial.name}</span>,{' '}
-        <span style={{ fontFamily: 'Cormorant, serif', fontSize: '15px' }}>клиент</span>
-      </p>
+      <div className="mt-auto flex items-center gap-3 md:gap-4 text-left">
+        <div className="relative h-12 w-12 md:h-14 md:w-14 shrink-0 overflow-hidden rounded-full bg-[#C9A882]/25 ring-2 ring-[#C9A882]/30">
+          {!avatarFailed ? (
+            <img
+              src={testimonial.avatar}
+              alt=""
+              width={112}
+              height={112}
+              className="h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
+              onError={() => setAvatarFailed(true)}
+            />
+          ) : (
+            <span className="flex h-full w-full items-center justify-center text-sm md:text-base text-[#3A2F2A]" style={{ fontWeight: 600 }}>
+              {initials}
+            </span>
+          )}
+        </div>
+        <p className="min-w-0 text-[#8B7355] text-sm md:text-base tracking-wide" style={{ fontWeight: 500 }}>
+          <span className="block" style={{ fontWeight: 600 }}>
+            {testimonial.name}
+          </span>
+          <span className="text-[15px] text-[#8B7355]/90">клиент</span>
+        </p>
+      </div>
     </div>
   );
 }
@@ -133,7 +182,7 @@ export function TestimonialsSection() {
           <div className="inline-block">
             <h2
               className="text-4xl md:text-5xl lg:text-6xl text-[#3A2F2A] tracking-tight mb-4"
-              style={{ fontFamily: 'Cormorant, serif', fontWeight: 300, letterSpacing: '-0.02em' }}
+              style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
             >
               Отзиви
             </h2>
@@ -183,7 +232,7 @@ export function TestimonialsSection() {
               </button>
               <p
                 className="text-[#8B7355] min-w-[50px] md:min-w-[60px] text-center text-base md:text-lg"
-                style={{ fontFamily: 'Cormorant, serif', fontWeight: 500 }}
+                style={{ fontWeight: 500 }}
               >
                 {countLabel}
               </p>
@@ -205,7 +254,7 @@ export function TestimonialsSection() {
           <div className="backdrop-blur-2xl bg-white/70 border border-white/60 p-8 md:p-16 max-w-4xl mx-auto">
             <h3
               className="text-4xl md:text-5xl lg:text-6xl text-[#3D3026] mb-4 md:mb-6 tracking-tight"
-              style={{ fontFamily: 'Cormorant, serif', fontWeight: 300, letterSpacing: '-0.02em' }}
+              style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
             >
               Готови за промяната?
             </h3>

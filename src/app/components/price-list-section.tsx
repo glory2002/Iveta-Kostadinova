@@ -48,7 +48,7 @@ export function PriceListSection() {
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-20">
           <div className="inline-block">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl text-[#3A2F2A] tracking-tight mb-4" style={{ fontFamily: 'Cormorant, serif', fontWeight: 300, letterSpacing: '-0.02em' }}>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl text-[#3A2F2A] tracking-tight mb-4" style={{ fontWeight: 300, letterSpacing: '-0.02em' }}>
               Ценоразпис
             </h2>
           </div>
@@ -59,9 +59,23 @@ export function PriceListSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-16 gap-y-8 md:gap-y-12">
             {priceCategories.map((category, categoryIndex) => (
               <div key={categoryIndex}>
-                <h3 className="text-3xl md:text-4xl lg:text-5xl text-[#3A2F2A] mb-4 md:mb-6" style={{ fontFamily: 'Cormorant, serif', fontWeight: 300, letterSpacing: '0.05em' }}>
-                  {category.title}
-                </h3>
+                <div className="mb-4 md:mb-6 flex flex-row flex-nowrap items-center justify-between gap-2 sm:gap-4">
+                  <h3
+                    className="min-w-0 flex-1 text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl text-[#3A2F2A] leading-tight"
+                    style={{ fontWeight: 500, letterSpacing: '0.05em' }}
+                  >
+                    {category.title}
+                  </h3>
+                  <a
+                    href="https://wa.me/359876003900"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 whitespace-nowrap inline-flex items-center justify-center rounded-full bg-[#3A2F2A] border border-[#3A2F2A] px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 text-sm sm:text-base md:text-lg text-[#E8D5C4] transition-colors duration-300 hover:bg-[#2A1F1A] hover:border-[#2A1F1A] hover:text-[#F5EFE7]"
+                    style={{ fontWeight: 600, letterSpacing: '0.05em' }}
+                  >
+                    Запази час
+                  </a>
+                </div>
                 <div className="space-y-3 md:space-y-4">
                   {category.items.map((item, itemIndex) => (
                     <div

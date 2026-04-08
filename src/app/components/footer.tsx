@@ -1,4 +1,7 @@
-import { Instagram, Phone, Mail, Facebook } from 'lucide-react';
+import { Instagram, Phone, Facebook, MapPin } from 'lucide-react';
+
+const STUDIO_ADDRESS = 'кв. Манастирски ливади, София, Блок 89А';
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(STUDIO_ADDRESS)}`;
 
 export function Footer() {
   return (
@@ -19,9 +22,24 @@ export function Footer() {
       
       {/* Contact Info */}
       <div className="mb-8 md:mb-12 space-y-3 md:space-y-4">
-        <p className="text-[#C9A882] text-base md:text-lg tracking-wide" style={{ fontWeight: 300 }}>
-          кв. Манастирски ливади, София, Блок 89А
+        <p className="text-[#E8D5C4] text-base md:text-lg tracking-wide" style={{ fontWeight: 500 }}>
+          PMU Студио Ивета Костадинова
         </p>
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-[#C9A882] text-base md:text-lg tracking-wide" style={{ fontWeight: 300 }}>
+            {STUDIO_ADDRESS}
+          </p>
+          <a
+            href={GOOGLE_MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm md:text-base text-[#C9A882] underline underline-offset-[5px] decoration-[#C9A882]/45 hover:text-[#E8D5C4] hover:decoration-[#E8D5C4]/70 transition-colors duration-300"
+            style={{ fontWeight: 300 }}
+          >
+            <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0 opacity-80" aria-hidden />
+            Карта в Google Maps
+          </a>
+        </div>
         <p className="text-[#C9A882] text-base md:text-lg" style={{ fontWeight: 300 }}>
           <a href="tel:+359876003900" className="hover:text-[#E8D5C4] transition-colors duration-300">+359 876 003900</a>
         </p>

@@ -27,7 +27,7 @@ export function FloatingCtaButtons() {
 
   return (
     <div
-      className={`fixed right-5 bottom-5 z-40 flex flex-col gap-2.5 md:gap-3 transition-all duration-500 scale-[0.8] ${
+      className={`fixed right-2 bottom-5 z-40 flex flex-col gap-2.5 md:gap-3 transition-all duration-500 scale-[0.8] ${
         isVisible && !isNearFooter ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-24'
       }`}
     >

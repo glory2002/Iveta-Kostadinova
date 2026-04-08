@@ -95,7 +95,7 @@ export function UpcomingCoursesSection() {
           <div className="inline-block">
             <h2
               className="text-4xl md:text-5xl lg:text-6xl text-[#3A2F2A] tracking-tight mb-4"
-              style={{ fontFamily: 'Cormorant, serif', fontWeight: 300, letterSpacing: '-0.02em' }}
+              style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
             >
               Предстоящи курсове
             </h2>
@@ -167,7 +167,7 @@ export function UpcomingCoursesSection() {
               </button>
               <p
                 className="text-[#8B7355] min-w-[50px] md:min-w-[60px] text-center text-base md:text-lg"
-                style={{ fontFamily: 'Cormorant, serif', fontWeight: 500 }}
+                style={{ fontWeight: 500 }}
               >
                 {countLabel}
               </p>
