@@ -1,3 +1,5 @@
+import { SiteButton } from './site-button';
+
 interface PriceItem {
   service: string;
   price: string;
@@ -43,58 +45,52 @@ const priceCategories: PriceCategory[] = [
 
 export function PriceListSection() {
   return (
-    <section id="prices" className="py-12 md:py-24 px-4 md:px-6 lg:px-12 bg-[#F5EFE7]">
-      <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-12 md:mb-20">
-          <div className="inline-block">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl text-[#3A2F2A] tracking-tight mb-4" style={{ fontWeight: 300, letterSpacing: '-0.02em' }}>
-              Ценоразпис
-            </h2>
-          </div>
-        </div>
+    <section id="prices" className="bg-background py-12 md:py-24 px-4 md:px-6 lg:px-12">
+      <div className="mx-auto max-w-6xl">
+        <h2
+          className="font-source-sans-3 mb-10 text-center text-4xl tracking-tight text-foreground md:mb-14 md:text-5xl lg:text-6xl"
+          style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
+        >
+          Ценоразпис
+        </h2>
 
-        {/* Price Categories */}
-        <div className="bg-[#F5EFE7] p-6 md:p-8 lg:p-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-16 gap-y-8 md:gap-y-12">
+        <div className="rounded-[18px] bg-[color:var(--palette-bg-white)] p-6 md:p-10 lg:p-14">
+          <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-16 md:gap-y-14">
             {priceCategories.map((category, categoryIndex) => (
               <div key={categoryIndex}>
-                <div className="mb-4 md:mb-6 flex flex-row flex-nowrap items-center justify-between gap-2 sm:gap-4">
-                  <h3
-                    className="min-w-0 flex-1 text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl text-[#3A2F2A] leading-tight"
-                    style={{ fontWeight: 500, letterSpacing: '0.05em' }}
-                  >
+                <div className="mb-6 flex flex-row flex-nowrap items-center justify-between gap-3 md:mb-8">
+                  <h3 className="min-w-0 flex-1 text-[28px] font-medium uppercase leading-snug tracking-[0.02em] text-[color:var(--palette-p700)]">
                     {category.title}
                   </h3>
-                  <a
-                    href="https://wa.me/359876003900"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="shrink-0 whitespace-nowrap inline-flex items-center justify-center rounded-full bg-[#3A2F2A] border border-[#3A2F2A] px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 text-sm sm:text-base md:text-lg text-[#E8D5C4] transition-colors duration-300 hover:bg-[#2A1F1A] hover:border-[#2A1F1A] hover:text-[#F5EFE7]"
-                    style={{ fontWeight: 600, letterSpacing: '0.05em' }}
-                  >
-                    Запази час
-                  </a>
+                  <SiteButton asChild variant="fillChocolateCompact">
+                    <a href="https://wa.me/359876003900" target="_blank" rel="noopener noreferrer">
+                      Запази час
+                    </a>
+                  </SiteButton>
                 </div>
-                <div className="space-y-3 md:space-y-4">
+                <ul className="flex flex-col gap-4 md:gap-5">
                   {category.items.map((item, itemIndex) => (
-                    <div
+                    <li
                       key={itemIndex}
-                      className={`flex items-start justify-between py-2 md:py-3 px-3 md:px-4 border-b border-[#C9A882]/20 ${
-                        item.subservice ? 'pl-6 md:pl-8 text-[#8B7355]' : 'text-[#3D3026]'
-                      }`}
+                      className={`flex items-baseline justify-between gap-6 ${
+                        item.subservice ? 'pl-3 text-[color:var(--palette-p700)]/65' : 'text-[color:var(--palette-p700)]'
+                      } ${item.price ? 'border-b border-[color:color-mix(in_srgb,var(--palette-p700)_14%,transparent)] pb-4 md:pb-[1.125rem]' : ''}`}
                     >
-                      <span className={`${item.subservice ? 'text-base md:text-lg' : 'text-lg md:text-xl'}`} style={{ fontWeight: 300 }}>
+                      <span
+                        className={`min-w-0 flex-1 leading-relaxed ${
+                          item.subservice ? 'text-[15px] font-light' : 'text-[16px] font-light tracking-[0.02em]'
+                        }`}
+                      >
                         {item.service}
                       </span>
-                      {item.price && (
-                        <span className={`${item.subservice ? 'text-base md:text-lg' : 'text-lg md:text-xl'} flex-shrink-0 ml-4`} style={{ fontWeight: 300 }}>
+                      {item.price ? (
+                        <span className="shrink-0 tabular-nums text-[15px] font-normal tracking-wide text-[color:var(--palette-p700)]">
                           {item.price}
                         </span>
-                      )}
-                    </div>
+                      ) : null}
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             ))}
           </div>

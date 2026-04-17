@@ -1,0 +1,61 @@
+/**
+ * Site buttons: 14px текст, padding 16px вертикално / 32px хоризонтално (--btn-pad-y / --btn-pad-x).
+ * Hover: само подчертаване (без смяна на фон/цвят).
+ */
+@layer components {
+  .sb-fill-cream {
+    @apply inline-flex items-center justify-center rounded-full bg-secondary px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-text-on-light)] uppercase transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .sb-fill-chocolate {
+    @apply inline-flex items-center justify-center rounded-full border border-[var(--btn-chocolate)] bg-[var(--btn-chocolate)] px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-text-on-dark)] uppercase transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .sb-fill-chocolate-compact {
+    @apply inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-[var(--btn-chocolate)] bg-[var(--btn-chocolate)] px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-text-on-dark)] uppercase transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /** Контурът е вътре (ring-inset), като при sb-outline-off-white */
+  .sb-outline-chocolate {
+    @apply inline-flex w-full max-w-[280px] cursor-pointer items-center justify-center rounded-full border-0 bg-[var(--palette-bg-white)] px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-chocolate)] uppercase ring-1 ring-inset ring-[color:var(--btn-chocolate)] transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50 focus-visible:ring-offset-0;
+  }
+
+  /* Икони (стрелки): същият 14px не важи; компактен квадрат с осезаема зона */
+  .sb-icon-outline {
+    @apply rounded-full border border-primary bg-transparent p-3 text-primary transition-[text-decoration,opacity] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50;
+  }
+
+  .sb-fill-cream-soft {
+    @apply inline-flex items-center justify-center rounded-full bg-secondary px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-text-on-light)] uppercase transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .sb-outline-primary {
+    @apply inline-flex items-center justify-center rounded-full border-0 bg-transparent px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-primary uppercase ring-1 ring-inset ring-primary transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50 focus-visible:ring-offset-0;
+  }
+
+  /** Hero / тъмен фон: stroke + текст = off-white от DS, прозрачен пълнеж; контурът е вътре (ring-inset), не извън кутията */
+  .sb-outline-off-white {
+    @apply inline-flex items-center justify-center rounded-full border-0 bg-transparent px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--palette-bg-white)] uppercase ring-1 ring-inset ring-[color:var(--palette-bg-white)] transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[color:color-mix(in_srgb,var(--palette-bg-white)_45%,transparent)] focus-visible:ring-offset-0;
+  }
+
+  .sb-floating-gold {
+    @apply inline-flex items-center gap-2 whitespace-nowrap rounded-full px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-text-on-dark)] uppercase shadow-lg backdrop-blur-md transition-[text-decoration] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 md:gap-3;
+    background: color-mix(in srgb, var(--palette-p500) 88%, var(--palette-bg));
+  }
+
+  .sb-floating-gold:hover span:last-child,
+  .sb-floating-brown:hover span:last-child {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+
+  .sb-floating-brown {
+    @apply inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary/90 px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-normal leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-text-on-dark)] uppercase shadow-lg backdrop-blur-md transition-[text-decoration] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 md:gap-3;
+  }
+
+  .sb-floating-icon {
+    @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-full md:h-8 md:w-8;
+    background: color-mix(in srgb, var(--palette-bg-white) 22%, transparent);
+  }
+}

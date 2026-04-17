@@ -1,8 +1,10 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+
+import { SiteButton } from './site-button';
 
 interface Testimonial {
   name: string;
@@ -65,21 +67,22 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   const initials = testimonialInitials(testimonial.name);
 
   return (
-    <div className="rounded-2xl md:rounded-3xl bg-[#F5EFE7]/30 p-6 md:p-10 transition-all duration-500 hover:-translate-y-2 h-full flex flex-col min-h-[280px] md:min-h-[420px]">
-      <div
-        className="text-5xl md:text-7xl text-[#C9A882]/30 mb-2 leading-none -mt-2"
-        style={{ fontWeight: 300 }}
-      >
-        {'\u201C'}
+    <div className="flex h-full min-h-[280px] flex-col rounded-[18px] border border-border/40 bg-[color:var(--palette-bg-white)] p-6 md:min-h-[420px] md:p-10">
+      <div className="mb-4 flex select-none items-center gap-0.5 md:mb-5 md:gap-1" aria-hidden>
+        {Array.from({ length: 5 }, (_, i) => (
+          <Star
+            key={i}
+            className="size-[1.05rem] shrink-0 fill-[color:var(--palette-bg)] text-[color:var(--palette-bg)] md:size-5"
+            strokeWidth={1.2}
+            aria-hidden
+          />
+        ))}
       </div>
-      <p
-        className="text-[#3D3026] mb-6 md:mb-8 leading-relaxed text-lg md:text-xl flex-grow"
-        style={{ fontWeight: 300 }}
-      >
+      <p className="font-source-sans-3 mb-6 flex-grow text-lg font-light leading-[1.2] text-foreground md:mb-8 md:text-xl">
         {testimonial.text}
       </p>
-      <div className="mt-auto flex items-center gap-3 md:gap-4 text-left">
-        <div className="relative h-12 w-12 md:h-14 md:w-14 shrink-0 overflow-hidden rounded-full bg-[#C9A882]/25 ring-2 ring-[#C9A882]/30">
+      <div className="mt-auto flex items-center gap-3 text-left md:gap-4">
+        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-primary/15 ring-2 ring-primary/25 md:h-14 md:w-14">
           {!avatarFailed ? (
             <img
               src={testimonial.avatar}
@@ -92,16 +95,16 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
               onError={() => setAvatarFailed(true)}
             />
           ) : (
-            <span className="flex h-full w-full items-center justify-center text-sm md:text-base text-[#3A2F2A]" style={{ fontWeight: 600 }}>
+            <span className="flex h-full w-full items-center justify-center text-sm text-foreground md:text-base" style={{ fontWeight: 600 }}>
               {initials}
             </span>
           )}
         </div>
-        <p className="min-w-0 text-[#8B7355] text-sm md:text-base tracking-wide" style={{ fontWeight: 500 }}>
-          <span className="block" style={{ fontWeight: 600 }}>
+        <p className="min-w-0 text-sm tracking-wide text-muted-foreground md:text-base" style={{ fontWeight: 500 }}>
+          <span className="block text-foreground" style={{ fontWeight: 600 }}>
             {testimonial.name}
           </span>
-          <span className="text-[15px] text-[#8B7355]/90">клиент</span>
+          <span className="text-[15px] text-muted-foreground/90">клиент</span>
         </p>
       </div>
     </div>
@@ -176,18 +179,14 @@ export function TestimonialsSection() {
   const countLabel = `${displayIndex + 1} / ${testimonials.length}`;
 
   return (
-    <section className="py-12 md:py-24 px-4 md:px-6 lg:px-12 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 md:mb-20">
-          <div className="inline-block">
-            <h2
-              className="text-4xl md:text-5xl lg:text-6xl text-[#3A2F2A] tracking-tight mb-4"
-              style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
-            >
-              Отзиви
-            </h2>
-          </div>
-        </div>
+    <section className="bg-[color:var(--palette-bg)] py-12 md:py-24 px-4 md:px-6 lg:px-12">
+      <div className="mx-auto max-w-7xl">
+        <h2
+          className="font-source-sans-3 mb-10 text-center text-4xl tracking-tight text-foreground md:mb-14 md:text-5xl lg:text-6xl"
+          style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
+        >
+          Отзиви
+        </h2>
 
         <div className="relative">
           <div className="-mx-4 md:-mx-6 lg:-mx-12">
@@ -220,60 +219,56 @@ export function TestimonialsSection() {
 
           <div className="flex items-center justify-center mt-6 md:mt-8">
             <div className="flex items-center gap-3 md:gap-4">
-              <button
+              <SiteButton
                 type="button"
+                variant="iconOutline"
                 onClick={() =>
                   isDesktop ? sliderRef.current?.slickPrev() : scrollMobile('prev')
                 }
-                className="bg-transparent hover:bg-[#C9A882]/10 text-[#C9A882] border border-[#C9A882] p-1.5 md:p-2 transition-all duration-300 rounded-full"
                 aria-label="Предишен отзив"
               >
                 <ChevronLeft size={18} className="md:w-5 md:h-5" />
-              </button>
+              </SiteButton>
               <p
-                className="text-[#8B7355] min-w-[50px] md:min-w-[60px] text-center text-base md:text-lg"
+                className="min-w-[50px] text-center text-base text-muted-foreground md:min-w-[60px] md:text-lg"
                 style={{ fontWeight: 500 }}
               >
                 {countLabel}
               </p>
-              <button
+              <SiteButton
                 type="button"
+                variant="iconOutline"
                 onClick={() =>
                   isDesktop ? sliderRef.current?.slickNext() : scrollMobile('next')
                 }
-                className="bg-transparent hover:bg-[#C9A882]/10 text-[#C9A882] border border-[#C9A882] p-1.5 md:p-2 transition-all duration-300 rounded-full"
                 aria-label="Следващ отзив"
               >
                 <ChevronRight size={18} className="md:w-5 md:h-5" />
-              </button>
+              </SiteButton>
             </div>
           </div>
         </div>
 
-        <div className="mt-16 md:mt-24 text-center">
-          <div className="backdrop-blur-2xl bg-white/70 border border-white/60 p-8 md:p-16 max-w-4xl mx-auto">
+        <div className="mt-16 text-center md:mt-24">
+          <div className="mx-auto max-w-4xl p-8 md:p-16">
             <h3
-              className="text-4xl md:text-5xl lg:text-6xl text-[#3D3026] mb-4 md:mb-6 tracking-tight"
+              className="font-source-sans-3 mb-4 text-4xl tracking-tight text-foreground md:mb-6 md:text-5xl lg:text-6xl"
               style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
             >
               Готови за промяната?
             </h3>
-            <p className="text-[#6B5D52] mb-6 md:mb-10 text-lg md:text-xl" style={{ fontWeight: 500 }}>
+            <p className="font-source-sans-3 mb-6 text-lg font-normal text-muted-foreground md:mb-10 md:text-xl">
               Резервирайте консултация
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center">
-              <button
-                className="bg-[#E8D5C4] hover:bg-[#D4C2B1] text-[#3D3026] px-8 py-3.5 md:px-10 md:py-4 transition-all duration-300 rounded-full text-base md:text-lg"
-                style={{ fontWeight: 500, letterSpacing: '0.05em' }}
-              >
-                Свържи Се С Мен
-              </button>
-              <button
-                className="bg-transparent hover:bg-[#C9A882]/10 text-[#C9A882] border border-[#C9A882] px-8 py-3.5 md:px-10 md:py-4 transition-all duration-300 rounded-full text-base md:text-lg"
-                style={{ fontWeight: 500, letterSpacing: '0.05em' }}
-              >
+            <div className="flex flex-col justify-center gap-4 sm:flex-row md:gap-6">
+              <SiteButton asChild variant="fillChocolate">
+                <a href="https://wa.me/359876003900" target="_blank" rel="noopener noreferrer">
+                  Свържи Се С Мен
+                </a>
+              </SiteButton>
+              <SiteButton type="button" variant="outlinePrimary">
                 Instagram
-              </button>
+              </SiteButton>
             </div>
           </div>
         </div>

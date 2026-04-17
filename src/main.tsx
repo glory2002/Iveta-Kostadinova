@@ -1,7 +1,15 @@
+import { createRoot } from 'react-dom/client';
+import App from './app/App.tsx';
+import { LanguageProvider } from './app/contexts/language-context';
+import './styles/index.css';
 
-  import { createRoot } from "react-dom/client";
-  import App from "./app/App.tsx";
-  import "./styles/index.css";
+const root = document.getElementById('root');
+if (!root) {
+  throw new Error('Missing #root');
+}
 
-  createRoot(document.getElementById("root")!).render(<App />);
-  
+createRoot(root).render(
+  <LanguageProvider>
+    <App />
+  </LanguageProvider>,
+);
