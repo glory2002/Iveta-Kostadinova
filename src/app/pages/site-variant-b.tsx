@@ -20,7 +20,7 @@ export function SiteVariantB() {
       <Header variant="b" />
       <HeroSection variant="b" />
       <ServicesSection variant="b" />
-      <UpcomingCoursesSection />
+      <UpcomingCoursesSection variant="b" />
       <PriceListSection />
       <TestimonialsSection />
       <Footer />

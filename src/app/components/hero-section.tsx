@@ -54,21 +54,26 @@ export function HeroSection({ variant = 'a' }: { variant?: HeroVariant }) {
           }`}
         >
           <h1
-            lang={isB ? 'bg' : undefined}
+            lang="bg"
             className={`mb-4 leading-[0.95] text-[color:var(--palette-bg-white)] drop-shadow-[0_1px_12px_color-mix(in_srgb,var(--palette-p700)_35%,transparent)] md:mb-6 ${
               isB
                 ? 'text-[2.35rem] tracking-[0.04em] md:text-[3.5rem] md:tracking-[0.045em] lg:text-[4rem] lg:tracking-[0.05em]'
-                : 'uppercase tracking-tight text-[2.5rem] md:text-[3.25rem] lg:text-[4.25rem] xl:text-[4.75rem]'
+                : 'uppercase tracking-normal text-[2.5rem] md:text-[3.25rem] lg:text-[4.25rem] xl:text-[4.75rem]'
             }`}
             style={{
-              fontWeight: isB ? 400 : 300,
-              letterSpacing: isB ? undefined : '-0.02em',
+              fontWeight: 400,
               ...(isB
                 ? {
-                    fontFamily: "'Commissioner', 'Manrope', 'Source Sans 3', sans-serif",
+                    fontFamily: "'Manrope Web', sans-serif",
                     fontFeatureSettings: '"locl" 1',
                   }
-                : {}),
+                : {
+                    fontFamily: "'Raleway Web', sans-serif",
+                    fontFeatureSettings: '"locl" 1',
+                    /* Regular 400 — като ред „Regular“ в Google Fonts; 300 изглежда по-тънко от preview-а */
+                    fontVariationSettings: "'wght' 400",
+                    textRendering: 'geometricPrecision',
+                  }),
             }}
           >
             {isB ? (
@@ -84,8 +89,21 @@ export function HeroSection({ variant = 'a' }: { variant?: HeroVariant }) {
             )}
           </h1>
           <p
+            lang="en"
             className="mb-8 text-sm uppercase leading-relaxed tracking-[0.16em] text-[color:color-mix(in_srgb,var(--palette-bg-white)_82%,transparent)] drop-shadow-[0_1px_8px_color-mix(in_srgb,var(--palette-p700)_30%,transparent)] md:mb-10 md:text-[15px] md:tracking-[0.18em]"
-            style={{ fontWeight: 300 }}
+            style={
+              isB
+                ? {
+                    fontFamily: "'Manrope Web', sans-serif",
+                    fontWeight: 300,
+                    fontVariationSettings: "'wght' 300",
+                  }
+                : {
+                    fontFamily: "'Raleway Web', sans-serif",
+                    fontWeight: 300,
+                    fontVariationSettings: "'wght' 300",
+                  }
+            }
           >
             PMU Expert · Master Trainer · Phibrows Ambassador
           </p>

@@ -45,10 +45,10 @@ export function Header({ variant = 'a' }: { variant?: HeaderVariant }) {
   /** Мобилно меню — по-голям текст; tracking като бутоните. */
   const mobileNavLinkStyle = { fontWeight: 500, letterSpacing: '0.08em' } as const;
 
-  /** Desktop nav: същата големина/дебелина/tracking като `sb-fill-chocolate` (лейбъл на CTA). */
+  /** Desktop nav: същата големина/tracking като CTA; леко по-дебело от преди (`font-medium`). */
   const desktopNavLinkClass = solidHeader
-    ? 'text-foreground/95 hover:text-primary transition-colors duration-200 text-[length:var(--btn-type-size)] font-normal uppercase leading-none tracking-[length:var(--btn-type-tracking)]'
-    : 'text-[color:var(--palette-bg-white)]/95 hover:text-secondary transition-colors duration-200 text-[length:var(--btn-type-size)] font-normal uppercase leading-none tracking-[length:var(--btn-type-tracking)]';
+    ? 'text-foreground/95 hover:text-primary transition-colors duration-200 text-[length:var(--btn-type-size)] font-medium uppercase leading-none tracking-[length:var(--btn-type-tracking)]'
+    : 'text-[color:var(--palette-bg-white)]/95 hover:text-secondary transition-colors duration-200 text-[length:var(--btn-type-size)] font-medium uppercase leading-none tracking-[length:var(--btn-type-tracking)]';
 
   const logoClass = solidHeader
     ? 'truncate text-base tracking-[0.22em] text-foreground md:text-lg lg:text-xl'

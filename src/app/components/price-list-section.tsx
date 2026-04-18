@@ -1,6 +1,22 @@
+import { ArrowRight } from 'lucide-react';
+
 import { SiteButton } from './site-button';
 
-const VIP_WA_URL = 'https://wa.me/359876003900';
+const WA_PHONE = '359876003900';
+
+function whatsappInquiryUrl(body: string): string {
+  return `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(body)}`;
+}
+
+function buildPriceInquiryMessage(categoryTitle: string, item: PriceItem): string {
+  if (item.serviceDetail) {
+    return `Здравейте! Интересувам се от ${item.service} (${item.serviceDetail}) — ${item.price}. Пиша от ценоразписа на сайта.`;
+  }
+  if (!item.price) {
+    return `Здравейте! Интересувам се от ${item.service} (${categoryTitle}). Пиша от ценоразписа на сайта.`;
+  }
+  return `Здравейте! Интересувам се от ${item.service} — ${item.price} (${categoryTitle}). Пиша от ценоразписа на сайта.`;
+}
 
 interface PriceItem {
   service: string;
@@ -59,35 +75,52 @@ function CategoryColumn({ category }: { category: PriceCategory }) {
           {category.title}
         </h3>
       </div>
-      <ul className="flex flex-col gap-4 md:gap-5">
-        {category.items.map((item, itemIndex) => (
-          <li
-            key={itemIndex}
-            className={`flex justify-between gap-6 ${
-              item.serviceDetail ? 'items-start' : 'items-baseline'
-            } ${
-              item.subservice ? 'pl-3 text-[color:var(--palette-p700)]/65' : 'text-[color:var(--palette-p700)]'
-            } ${item.price ? 'border-b border-[color:color-mix(in_srgb,var(--palette-p700)_7%,transparent)] pb-4 md:pb-[1.125rem]' : ''}`}
-          >
-            <span
-              className={`min-w-0 flex-1 leading-relaxed ${
-                item.subservice ? 'text-[15px] font-light' : 'text-[16px] font-light tracking-[0.02em]'
-              }`}
+      <ul className="flex flex-col gap-4 md:gap-3">
+        {category.items.map((item, itemIndex) => {
+          const href = whatsappInquiryUrl(buildPriceInquiryMessage(category.title, item));
+          const label = `Запитване в WhatsApp за ${item.service}${item.price ? ` — ${item.price}` : ''}`;
+
+          return (
+            <li
+              key={itemIndex}
+              className={
+                item.subservice ? 'pl-3 text-[color:var(--palette-p700)]/65' : 'text-[color:var(--palette-p700)]'
+              }
             >
-              <span className="block">{item.service}</span>
-              {item.serviceDetail ? (
-                <span className="mt-1.5 block text-[15px] font-light leading-snug tracking-[0.02em] text-[color:var(--palette-p700)]/85">
-                  {item.serviceDetail}
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className={`group flex w-full min-h-[56px] cursor-pointer touch-manipulation justify-between gap-4 rounded-xl px-3 py-3 text-left transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] md:min-h-[50px] md:gap-4 md:px-3 md:py-2.5 ${
+                  item.serviceDetail ? 'items-start' : 'items-center'
+                } -mx-1 active:bg-[color:color-mix(in_srgb,var(--palette-p700)_11%,transparent)] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)]`}
+              >
+                <span
+                  className={`min-w-0 flex-1 leading-relaxed ${
+                    item.subservice ? 'text-[15px] font-light' : 'text-[16px] font-normal tracking-[0.02em]'
+                  }`}
+                >
+                  <span className="block underline-offset-2 transition-[text-decoration-color] group-hover:underline group-hover:decoration-[color:color-mix(in_srgb,var(--palette-p700)_35%,transparent)]">
+                    {item.service}
+                  </span>
+                  {item.serviceDetail ? (
+                    <span className="mt-1.5 block text-[15px] font-light leading-snug tracking-[0.02em] text-[color:var(--palette-p700)]/85">
+                      {item.serviceDetail}
+                    </span>
+                  ) : null}
                 </span>
-              ) : null}
-            </span>
-            {item.price ? (
-              <span className="shrink-0 tabular-nums text-[15px] font-normal tracking-wide text-[color:var(--palette-p700)]">
-                {item.price}
-              </span>
-            ) : null}
-          </li>
-        ))}
+                <span className="flex shrink-0 items-center gap-3 tabular-nums text-[15px] font-normal tracking-wide text-[color:var(--palette-p700)] md:gap-2.5">
+                  {item.price ? <span className="shrink-0">{item.price}</span> : null}
+                  <ArrowRight
+                    className="h-4 w-4 shrink-0 text-[color:var(--palette-p700)]/35 transition-[color,transform] group-hover:text-[color:var(--palette-p700)]/70 group-hover:translate-x-0.5 group-active:translate-x-1"
+                    aria-hidden
+                  />
+                </span>
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -98,9 +131,18 @@ const vipCategory = priceCategories[3];
 
 function VipPassBanner() {
   const price = vipCategory?.items[0]?.price ?? '€500';
+  const vipHref = whatsappInquiryUrl(
+    `Здравейте! Интересувам се от VIP PASS — ${price}. Пиша от ценоразписа на сайта.`,
+  );
 
   return (
-    <div className="rounded-[14px] border border-[color:color-mix(in_srgb,var(--palette-p700)_20%,transparent)] bg-[color:var(--palette-bg-white)] px-5 py-7 shadow-[0_1px_0_color-mix(in_srgb,var(--palette-p700)_6%,transparent)] md:px-9 md:py-9 lg:px-11 lg:py-10">
+    <a
+      href={vipHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Запитване в WhatsApp за VIP PASS"
+      className="group block cursor-pointer touch-manipulation rounded-[14px] border border-[color:color-mix(in_srgb,var(--palette-p700)_20%,transparent)] bg-[color:var(--palette-bg-white)] px-5 py-7 text-inherit no-underline transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.995] active:bg-[color:color-mix(in_srgb,var(--palette-p700)_4%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)] md:px-9 md:py-9 lg:px-11 lg:py-10"
+    >
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
         <div className="min-w-0 flex-1">
           <p className="font-source-sans-3 mb-3 max-w-[20rem] text-xs font-normal uppercase leading-snug tracking-[0.14em] text-[color:var(--palette-p700)]/90 sm:mb-4 sm:text-sm sm:tracking-[0.18em] md:mb-4 md:max-w-none md:text-xs md:tracking-[0.14em] lg:text-sm lg:tracking-[0.16em]">
@@ -125,13 +167,11 @@ function VipPassBanner() {
             {price}
           </p>
           <SiteButton asChild variant="outlineChocolate" className="w-full shrink-0 justify-center uppercase sm:w-auto">
-            <a href={VIP_WA_URL} target="_blank" rel="noopener noreferrer">
-              Запиши час
-            </a>
+            <span>Запиши час</span>
           </SiteButton>
         </div>
       </div>
-    </div>
+    </a>
   );
 }
 
@@ -148,7 +188,7 @@ export function PriceListSection() {
 
         <div className="rounded-[18px] bg-[color:var(--palette-bg-white)] py-6 px-0 md:p-10 lg:p-14">
           <div className="flex flex-col gap-12 md:gap-14 lg:gap-16">
-            <div className="grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-8 md:gap-y-10 lg:gap-x-10 xl:gap-x-12">
+            <div className="grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-6 md:gap-y-8 lg:gap-x-8 xl:gap-x-10">
               {mainCategories.map((category, categoryIndex) => (
                 <CategoryColumn key={category.title + categoryIndex} category={category} />
               ))}

@@ -14,8 +14,11 @@ import {
 
 const CONSULT_URL = 'https://wa.me/359876003900';
 
-/** Долна част на картата — off-white от DS (`--palette-bg-white` / #FAF9F7) */
-const CARD_PANEL_OFF_WHITE = 'bg-[color:var(--palette-bg-white)]';
+/** Цялата карта + долен панел — един и същ off-white (#FAF9F7), за да няма „рез“ срещу `bg-white`. */
+const CARD_BG_OFF_WHITE = 'bg-[color:var(--palette-bg-white)]';
+
+/** Хоризонтален inset в картата (панел + overlay заглавие): 32px → 40px; по-тесно на малки ширини. */
+const CARD_INNER_X = 'px-6 sm:px-8 xl:px-10';
 
 interface Course {
   title: string;
@@ -28,6 +31,7 @@ interface Course {
   imageAlt: string;
 }
 
+/** Снимки: Unsplash (лиценз за ползване според Unsplash). Квадрат 600×600 за карти. */
 const courses: Course[] = [
   {
     title: 'PhiBrows',
@@ -35,8 +39,9 @@ const courses: Course[] = [
     meta: { level: 'НАЧИНАЕЩИ', spots: '4 МЕСТА' },
     date: '23–24 Януари 2026',
     location: 'София',
+    /** Същата визуална като картата „ОБУЧЕНИЯ“ в `services-section.tsx` */
     image:
-      'https://static.wixstatic.com/media/4de890_e4cee4f07ae54c1dafa407b1467b73ef~mv2.jpeg/v1/crop/x_237,y_0,w_847,h_843/fill/w_600,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/brows.jpeg',
+      'https://static.wixstatic.com/media/4de890_f7dc057ea81a41e68683dd9e36c0ab2f~mv2.jpeg/v1/fill/w_600,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/obuchenia-new.jpeg',
     imageAlt: 'PhiBrows обучение',
   },
   {
@@ -46,8 +51,8 @@ const courses: Course[] = [
     date: '6–7 Февруари 2026',
     location: 'София',
     image:
-      'https://static.wixstatic.com/media/4de890_b5e4409b55234cb7a5936f6f57ec06f9~mv2.jpeg/v1/crop/x_237,y_0,w_847,h_843/fill/w_600,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/lips.jpeg',
-    imageAlt: 'PhiBrows Delphi обучение',
+      'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=600&h=600&q=80',
+    imageAlt: 'Козметична процедура в студио',
   },
   {
     title: 'Холивудски пилинг',
@@ -55,8 +60,8 @@ const courses: Course[] = [
     date: '14–15 Март 2026',
     location: 'София',
     image:
-      'https://static.wixstatic.com/media/4de890_acf04261513b468dba747015c5cb4137~mv2.jpeg/v1/fill/w_600,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_1970.jpeg',
-    imageAlt: 'Обучение холивудски пилинг',
+      'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&h=600&q=80',
+    imageAlt: 'Почистване и грижа за кожата в козметично студио',
   },
   {
     title: 'PhiLips',
@@ -65,8 +70,8 @@ const courses: Course[] = [
     date: '2–3 Април 2026',
     location: 'София',
     image:
-      'https://static.wixstatic.com/media/4de890_b5e4409b55234cb7a5936f6f57ec06f9~mv2.jpeg/v1/crop/x_237,y_0,w_847,h_843/fill/w_600,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/lips.jpeg',
-    imageAlt: 'PhiLips обучение',
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&h=600&q=80',
+    imageAlt: 'Грим и акцент върху устни',
   },
   {
     title: 'PhiAcademy',
@@ -75,14 +80,22 @@ const courses: Course[] = [
     date: '20–21 Юни 2026',
     location: 'София',
     image:
-      'https://static.wixstatic.com/media/4de890_f7dc057ea81a41e68683dd9e36c0ab2f~mv2.jpeg/v1/fill/w_600,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/obuchenia-new.jpeg',
-    imageAlt: 'PhiAcademy обучение',
+      'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&h=600&q=80',
+    imageAlt: 'Обучение и работа в екип',
   },
 ];
 
-function CourseCard({ course }: { course: Course }) {
+const courseTitleClass =
+  'mb-0.5 text-2xl font-medium uppercase leading-[1.12] tracking-[0.02em] md:mb-1 md:text-[26px] md:leading-[1.08] lg:text-[28px] lg:leading-[1.1]';
+
+const courseCardMetaLineClass =
+  'min-w-0 text-sm font-normal leading-snug tracking-[0.02em] text-[color:var(--palette-p700)] md:text-[15px]';
+
+function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' | 'b' }) {
+  const isOverlayTitle = variant === 'b';
+
   return (
-    <article className="group flex min-h-0 flex-col overflow-hidden rounded-[18px] bg-white">
+    <article className={`group flex min-h-0 flex-col overflow-hidden rounded-[18px] ${CARD_BG_OFF_WHITE}`}>
       <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-t-[18px] rounded-b-2xl">
         <ImageWithFallback
           src={course.image}
@@ -90,30 +103,67 @@ function CourseCard({ course }: { course: Course }) {
           className="absolute inset-0 h-full w-full rounded-t-[18px] rounded-b-2xl object-cover transition-transform duration-700 group-hover:scale-[1.03]"
         />
         {course.meta ? (
-          <div className="pointer-events-none absolute left-2.5 top-2.5 z-[1] md:left-3 md:top-3">
+          <div className="pointer-events-none absolute left-2.5 top-2.5 z-[2] md:left-3 md:top-3">
             <p className="max-w-[min(100%,13rem)] rounded-sm bg-[color:color-mix(in_srgb,var(--palette-p900)_78%,transparent)] px-2 py-1 text-left text-[9px] font-normal uppercase leading-tight tracking-[0.16em] text-[color:var(--palette-bg-white)] shadow-sm backdrop-blur-[2px] sm:text-[10px] sm:tracking-[0.17em] md:px-2 md:py-1.5 md:text-[11px] md:tracking-[0.19em]">
               {course.meta.level}
             </p>
           </div>
         ) : null}
+        {isOverlayTitle ? (
+          <>
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[62%] bg-gradient-to-t from-black/[0.82] via-black/38 via-[44%] to-transparent"
+              aria-hidden
+            />
+            <h3
+              className={`absolute inset-x-0 bottom-0 z-[3] ${CARD_INNER_X} pb-4 pt-12 text-left md:pb-6 md:pt-14 ${courseTitleClass} text-[color:var(--palette-bg-white)] drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]`}
+            >
+              <span className="block">{course.title}</span>
+              {course.titleLine2 ? (
+                <span className="mt-0.5 block not-italic md:mt-0.5">{course.titleLine2}</span>
+              ) : null}
+            </h3>
+          </>
+        ) : null}
       </div>
 
       <div
-        className={`flex w-full flex-col items-start justify-start px-4 pb-5 pt-5 text-left sm:px-6 md:px-7 md:pb-6 md:pt-4 lg:px-8 ${CARD_PANEL_OFF_WHITE}`}
+        className={`flex w-full flex-col items-stretch justify-start ${CARD_INNER_X} pb-5 pt-5 text-left md:pb-6 md:pt-4 ${CARD_BG_OFF_WHITE}`}
       >
-        <h3 className="mb-0.5 text-2xl font-medium uppercase leading-[1.12] tracking-[0.02em] text-[color:var(--palette-p700)] md:mb-1 md:text-[26px] md:leading-[1.08] lg:text-[28px] lg:leading-[1.1]">
-          <span className="block">{course.title}</span>
-          {course.titleLine2 ? (
-            <span className="mt-0.5 block md:mt-0.5">{course.titleLine2}</span>
-          ) : null}
-        </h3>
-        <p className="mt-2 mb-4 text-xs font-normal uppercase leading-snug tracking-[0.14em] text-[color:var(--palette-p700)]/85 md:mt-2.5 md:mb-5 md:text-sm md:tracking-[0.15em] lg:mt-3 lg:mb-6 lg:tracking-[0.16em]">
-          {course.date}
-          <span className="mx-2 inline-block translate-y-[-0.06em] text-[1.35em] font-semibold leading-none text-[color:var(--palette-p700)] md:mx-2.5 md:text-[1.25em]">
-            ·
-          </span>
-          {course.location}
-        </p>
+        {/* 1. Заглавна група (при вариант B заглавието е върху снимката — тук няма дубликат) */}
+        {!isOverlayTitle ? (
+          <div className="flex w-full flex-col items-start text-left">
+            <h3 className={`${courseTitleClass} text-[color:var(--palette-p700)]`}>
+              <span className="block">{course.title}</span>
+              {course.titleLine2 ? (
+                <span className="mt-0.5 block not-italic md:mt-0.5">{course.titleLine2}</span>
+              ) : null}
+            </h3>
+          </div>
+        ) : null}
+
+        {/* 3. Детайли: на един ред — дата · локация */}
+        <div
+          className={`flex w-full flex-col items-start ${!isOverlayTitle ? 'mt-4 md:mt-5' : ''}`}
+        >
+          <div className="flex w-full min-w-0 flex-wrap items-baseline gap-x-2 md:gap-x-2.5">
+            <p className={courseCardMetaLineClass}>{course.date}</p>
+            <span
+              className="inline-block shrink-0 translate-y-[-0.06em] text-[1.15em] font-semibold leading-none text-[color:var(--palette-p700)]/45 md:text-[1.1em]"
+              aria-hidden
+            >
+              ·
+            </span>
+            <p className={courseCardMetaLineClass}>{course.location}</p>
+          </div>
+        </div>
+
+        <hr
+          className="mt-6 mb-5 w-full border-0 border-t border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_10%,transparent)] md:mt-7 md:mb-6"
+          aria-hidden
+        />
+
+        {/* 4. CTA */}
         <div className="flex w-full justify-start">
           <SiteButton
             asChild
@@ -144,7 +194,7 @@ function CourseCard({ course }: { course: Course }) {
  * Веднага под секцията с услугите.
  * Под md: хоризонтална карусел с „peek“ на следващата карта + индикатор.
  */
-export function UpcomingCoursesSection() {
+export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' }) {
   const [api, setApi] = useState<CarouselApi>();
   const [desktopApi, setDesktopApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -223,49 +273,51 @@ export function UpcomingCoursesSection() {
           Предстоящи курсове
         </h2>
 
-        {/* Мобилно: отстъп отляво = luxury gutter; каруселът е luxury-bleed за пълна ширина */}
+        {/* Мобилно: левият inset е на wrapper извън Embla трека — иначе transform на трека „залепва“ първата карта */}
         <div className="md:hidden">
           <div className="luxury-bleed-x">
-            <Carousel
-              setApi={setApi}
-              opts={{
-                align: 'start',
-                loop: false,
-                containScroll: false,
-              }}
-              className="w-full"
-              aria-label="Предстоящи курсове — карусел"
-            >
-              <CarouselContent className="ml-0 gap-3 pl-[var(--luxury-gutter)]">
-                {courses.map((course, index) => (
-                  <CarouselItem
-                    key={`${course.title}-${course.date}-${index}`}
-                    className="min-w-0 shrink-0 grow-0 basis-[88%] pl-0"
-                  >
-                    <CourseCard course={course} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
+            <div className="box-border min-w-0 w-full pl-[max(1.5rem,var(--luxury-gutter),env(safe-area-inset-left,0px))] pr-0">
+              <Carousel
+                setApi={setApi}
+                opts={{
+                  align: 'start',
+                  loop: false,
+                  containScroll: 'trimSnaps',
+                }}
+                className="w-full"
+                aria-label="Предстоящи курсове — карусел"
+              >
+                <CarouselContent className="ml-0 gap-3 pl-0">
+                  {courses.map((course, index) => (
+                    <CarouselItem
+                      key={`${course.title}-${course.date}-${index}`}
+                      className="min-w-0 shrink-0 grow-0 basis-[88%] pl-0"
+                    >
+                      <CourseCard course={course} variant={variant} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
 
-            <div
-              className={`w-full overflow-hidden rounded-full bg-primary/15 transition-[opacity,margin-block-start,height] duration-300 ease-out ${
-                progressVisible
-                  ? 'mt-4 h-1 opacity-100'
-                  : 'mt-0 h-0 opacity-0'
-              }`}
-              role="presentation"
-              aria-hidden={!progressVisible}
-            >
               <div
-                className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
-                style={{ width: `${((current + 1) / count) * 100}%` }}
-              />
+                className={`w-full overflow-hidden rounded-full bg-primary/15 transition-[opacity,margin-block-start,height] duration-300 ease-out ${
+                  progressVisible
+                    ? 'mt-4 h-1 opacity-100'
+                    : 'mt-0 h-0 opacity-0'
+                }`}
+                role="presentation"
+                aria-hidden={!progressVisible}
+              >
+                <div
+                  className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
+                  style={{ width: `${((current + 1) / count) * 100}%` }}
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Таблет и нагоре: Embla карусел — плъзгане, стрелки, точки */}
+        {/* Таблет и нагоре: Embla карусел — плъзгане, стрелки */}
         <div className="hidden min-w-0 md:block">
           <Carousel
             setApi={setDesktopApi}
@@ -283,7 +335,7 @@ export function UpcomingCoursesSection() {
                   key={`desktop-${course.title}-${course.date}-${index}`}
                   className="min-w-0 shrink-0 grow-0 basis-[calc((100%-3rem)/3)] pl-0"
                 >
-                  <CourseCard course={course} />
+                  <CourseCard course={course} variant={variant} />
                 </CarouselItem>
               ))}
             </CarouselContent>
