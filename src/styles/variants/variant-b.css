@@ -1,0 +1,26 @@
+/**
+ * Вариант B — отделна визуална линия за алтернативно предложение към клиента.
+ *
+ * Важи само когато коренът на приложението за тази страница има `data-site-variant="b"`
+ * (виж `src/app/pages/site-variant-b.tsx`).
+ *
+ * Добавяй тук: Manrope/други шрифтове, цветове, разстояния, фонове на секции и т.н.,
+ * винаги обхванати с `[data-site-variant='b']` (или по-конкретни селектори под него),
+ * за да не се променя Вариант А.
+ */
+
+[data-site-variant='b'] {
+  --site-variant: b;
+  font-family: 'Manrope Web', sans-serif;
+}
+
+[data-site-variant='b'] h1,
+[data-site-variant='b'] h2,
+[data-site-variant='b'] h3,
+[data-site-variant='b'] h4,
+[data-site-variant='b'] h5,
+[data-site-variant='b'] h6,
+[data-site-variant='b'] article {
+  font-family: 'Manrope Web', sans-serif;
+  font-feature-settings: 'locl' 1;
+}

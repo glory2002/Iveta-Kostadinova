@@ -1,25 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { SiteButton } from './site-button';
 
 export function FloatingCtaButtons() {
   const [isVisible, setIsVisible] = useState(false);
   const [isNearFooter, setIsNearFooter] = useState(false);
+  const footerRef = useRef<HTMLElement | null>(null);
+  const rafRef = useRef(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsVisible(window.scrollY > 300);
+    footerRef.current = document.querySelector('footer');
 
-      const footer = document.querySelector('footer');
-      if (footer) {
-        const footerRect = footer.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        setIsNearFooter(footerRect.top < windowHeight - 100);
-      }
+    const handleScroll = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = 0;
+        const y = window.scrollY;
+        const showFab = y > 300;
+        setIsVisible((prev) => (prev === showFab ? prev : showFab));
+
+        const footer = footerRef.current;
+        if (footer) {
+          const footerRect = footer.getBoundingClientRect();
+          const near = footerRect.top < window.innerHeight - 100;
+          setIsNearFooter((prev) => (prev === near ? prev : near));
+        }
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return (

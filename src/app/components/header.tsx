@@ -15,31 +15,39 @@ export function Header({ variant = 'a' }: { variant?: HeaderVariant }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const prevScrollYRef = useRef(0);
+  const scrollRafRef = useRef(0);
 
   useEffect(() => {
     prevScrollYRef.current = window.scrollY;
 
     const handleScroll = () => {
-      const y = window.scrollY;
-      const prev = prevScrollYRef.current;
+      cancelAnimationFrame(scrollRafRef.current);
+      scrollRafRef.current = requestAnimationFrame(() => {
+        scrollRafRef.current = 0;
+        const y = window.scrollY;
+        const prev = prevScrollYRef.current;
 
-      setSolidHeader(y > 50);
+        setSolidHeader(y > 50);
 
-      if (y < 50) {
-        setIsVisible(true);
-      } else if (y > prev) {
-        setIsVisible(false);
-        setIsMobileMenuOpen(false);
-      } else {
-        setIsVisible(true);
-      }
+        if (y < 50) {
+          setIsVisible(true);
+        } else if (y > prev) {
+          setIsVisible(false);
+          setIsMobileMenuOpen(false);
+        } else {
+          setIsVisible(true);
+        }
 
-      prevScrollYRef.current = y;
+        prevScrollYRef.current = y;
+      });
     };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      cancelAnimationFrame(scrollRafRef.current);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   /** Мобилно меню — по-голям текст; tracking като бутоните. */

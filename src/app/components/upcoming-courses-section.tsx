@@ -214,11 +214,11 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
   const hideBarTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showProgressBar = useCallback(() => {
-    setProgressVisible(true);
     if (hideBarTimerRef.current) {
       clearTimeout(hideBarTimerRef.current);
       hideBarTimerRef.current = null;
     }
+    setProgressVisible((was) => (was ? was : true));
   }, []);
 
   const scheduleHideProgressBar = useCallback(() => {

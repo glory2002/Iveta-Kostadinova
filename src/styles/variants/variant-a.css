@@ -1,0 +1,11 @@
+/**
+ * Вариант A — основният клиентски лейаут (текущият „production“ вид).
+ *
+ * - Глобалните токени и base типография са в `theme.css` (Raleway като `font-sans`).
+ * - Тук слагай само правила под `[data-site-variant='a']`, за да не се бърка с Вариант Б.
+ * - Коренът на страницата задава атрибута: `site-home.tsx` → `data-site-variant="a"`.
+ */
+
+[data-site-variant='a'] {
+  --site-variant: a;
+}

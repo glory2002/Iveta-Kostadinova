@@ -36,7 +36,7 @@ export function Reveal({
       className={cn('w-full min-w-0', className)}
       initial={reduced ? 'visible' : 'hidden'}
       whileInView="visible"
-      viewport={{ once: true, amount: 0.12, margin: '0px 0px -10% 0px' }}
+      viewport={{ once: true, amount: 0.1, margin: '0px 0px -8% 0px' }}
       variants={{
         hidden: revealVariants.hidden,
         visible: {

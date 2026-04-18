@@ -11,6 +11,7 @@ import { FloatingCtaButtons } from '../components/floating-cta-buttons';
 /**
  * Вариант B — макет: центриран хедър, hero с един outline CTA, бяла секция с 4 карти в ред.
  * Долу: същите секции като при вариант A.
+ * Стилове само за този вариант: `src/styles/variants/variant-b.css` (селектор `[data-site-variant='b']`).
  */
 export function SiteVariantB() {
   return (
@@ -27,7 +28,7 @@ export function SiteVariantB() {
         <UpcomingCoursesSection variant="b" />
       </Reveal>
       <Reveal delay={0.1}>
-        <PriceListSection />
+        <PriceListSection variant="b" />
       </Reveal>
       <Reveal delay={0.14}>
         <TestimonialsSection />

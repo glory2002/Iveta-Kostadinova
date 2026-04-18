@@ -8,10 +8,16 @@ import { TestimonialsSection } from '../components/testimonials-section';
 import { Footer } from '../components/footer';
 import { FloatingCtaButtons } from '../components/floating-cta-buttons';
 
-/** Текущият пълен лейаут на сайта (вариант A). */
+/**
+ * Текущият пълен лейаут на сайта (вариант A).
+ * Стилове само за A: `src/styles/variants/variant-a.css` (`[data-site-variant='a']`).
+ */
 export function SiteHomePage() {
   return (
-    <div className="min-h-screen w-full min-w-0 overflow-x-hidden">
+    <div
+      data-site-variant="a"
+      className="min-h-screen w-full min-w-0 overflow-x-hidden"
+    >
       <Header />
       <HeroSection />
       <Reveal>

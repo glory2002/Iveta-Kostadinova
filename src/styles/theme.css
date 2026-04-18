@@ -207,20 +207,7 @@
 }
 
 /**
- * Вариант B: Manrope Web за целия екран и за заглавия / `<article>` карти.
- * Виж `fonts.css` (@font-face **Manrope Web**).
+ * Вариант A / Б по отделни файлове:
+ * - `variants/variant-a.css` — обхват `[data-site-variant='a']`
+ * - `variants/variant-b.css` — обхват `[data-site-variant='b']` (Manrope и др.)
  */
-[data-site-variant='b'] {
-  font-family: 'Manrope Web', sans-serif;
-}
-
-[data-site-variant='b'] h1,
-[data-site-variant='b'] h2,
-[data-site-variant='b'] h3,
-[data-site-variant='b'] h4,
-[data-site-variant='b'] h5,
-[data-site-variant='b'] h6,
-[data-site-variant='b'] article {
-  font-family: 'Manrope Web', sans-serif;
-  font-feature-settings: 'locl' 1;
-}

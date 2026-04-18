@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'motion/react';
 
 import { liftSpring } from './motion-primitives';
 import { SiteButton } from './site-button';
+import { cn } from './ui/utils';
 
 const WA_PHONE = '359876003900';
 
@@ -69,17 +70,35 @@ const priceCategories: PriceCategory[] = [
   }
 ];
 
-function CategoryColumn({ category }: { category: PriceCategory }) {
+function CategoryColumn({
+  category,
+  variant = 'a',
+}: {
+  category: PriceCategory;
+  variant?: 'a' | 'b';
+}) {
+  const isVariantA = variant === 'a';
+
   return (
     <div className="w-full min-w-0">
-      <div className="mb-6 w-full border-b border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_11%,var(--palette-bg-white))] pb-3 md:mb-8 md:pb-4">
+      <div
+        className={cn(
+          'mb-6 w-full border-b border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_11%,var(--palette-bg-white))] pb-3 md:mb-8 md:pb-4',
+          isVariantA && 'max-md:mb-4 max-md:pb-2',
+        )}
+      >
         <div className="flex justify-center md:justify-between">
           <h3 className="min-w-0 w-full text-center text-[1.25rem] font-semibold uppercase leading-snug tracking-[0.02em] text-[color:var(--palette-p700)] md:w-auto md:flex-1 md:text-left md:text-[28px] md:font-medium">
             {category.title}
           </h3>
         </div>
       </div>
-      <ul className="flex flex-col gap-4 md:gap-3">
+      <ul
+        className={cn(
+          'flex flex-col md:gap-3',
+          isVariantA ? 'gap-2' : 'gap-4',
+        )}
+      >
         {category.items.map((item, itemIndex) => {
           const href = whatsappInquiryUrl(buildPriceInquiryMessage(category.title, item));
           const label = `Запитване в WhatsApp за ${item.service}${item.price ? ` — ${item.price}` : ''}`;
@@ -96,9 +115,14 @@ function CategoryColumn({ category }: { category: PriceCategory }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className={`group flex w-full min-h-[56px] cursor-pointer touch-manipulation justify-between gap-4 rounded-xl px-3 py-3 text-left transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] md:min-h-[50px] md:gap-4 md:px-3 md:py-2.5 ${
-                  item.serviceDetail ? 'items-start' : 'items-center'
-                } -mx-1 active:bg-[color:color-mix(in_srgb,var(--palette-p700)_11%,transparent)] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)]`}
+                className={cn(
+                  'group flex w-full cursor-pointer touch-manipulation justify-between gap-4 rounded-xl px-3 text-left transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] md:gap-4 md:px-3 md:py-2.5',
+                  isVariantA
+                    ? 'min-h-[48px] py-2 md:min-h-[50px]'
+                    : 'min-h-[56px] py-3 md:min-h-[50px]',
+                  item.serviceDetail ? 'items-start' : 'items-center',
+                  '-mx-1 active:bg-[color:color-mix(in_srgb,var(--palette-p700)_11%,transparent)] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)]',
+                )}
               >
                 <span
                   className={`min-w-0 flex-1 leading-relaxed ${
@@ -182,7 +206,9 @@ function VipPassBanner() {
   );
 }
 
-export function PriceListSection() {
+export function PriceListSection({ variant = 'a' }: { variant?: 'a' | 'b' }) {
+  const isVariantA = variant === 'a';
+
   return (
     <section id="prices" className="bg-background pt-16 pb-24 md:pt-24 md:pb-36">
       <div className="luxury-page">
@@ -194,10 +220,24 @@ export function PriceListSection() {
         </h2>
 
         <div className="rounded-[18px] bg-[color:var(--palette-bg-white)] py-6 px-0 md:p-10 lg:p-14">
-          <div className="flex flex-col gap-12 md:gap-14 lg:gap-16">
-            <div className="grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-6 md:gap-y-8 lg:gap-x-8 xl:gap-x-10">
+          <div
+            className={cn(
+              'flex flex-col md:gap-14 lg:gap-16',
+              isVariantA ? 'gap-10' : 'gap-12',
+            )}
+          >
+            <div
+              className={cn(
+                'grid grid-cols-1 md:grid-cols-3 md:gap-x-6 md:gap-y-8 lg:gap-x-8 xl:gap-x-10',
+                isVariantA ? 'gap-y-8' : 'gap-y-12',
+              )}
+            >
               {mainCategories.map((category, categoryIndex) => (
-                <CategoryColumn key={category.title + categoryIndex} category={category} />
+                <CategoryColumn
+                  key={category.title + categoryIndex}
+                  category={category}
+                  variant={variant}
+                />
               ))}
             </div>
 
