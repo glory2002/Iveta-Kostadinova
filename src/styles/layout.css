@@ -1,7 +1,7 @@
 /**
  * Premium page shell: центриран контейнер max 1280px, хоризонтален inset чрез
  * `width: min(1280px, 100% − 2×--luxury-gutter)` + `margin-inline: auto`.
- * `--luxury-gutter`: 20 / 28 / 40 / 48px по брейкпойнти (виж `theme.css`).
+ * `--luxury-gutter`: 12 / 28 / 40 / 48px по брейкпойнти (виж `theme.css`).
  * За карусел/edge-to-edge: `.luxury-bleed-x` (viewport breakout).
  */
 @layer components {

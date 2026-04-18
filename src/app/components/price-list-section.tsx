@@ -1,5 +1,7 @@
 import { ArrowRight } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 
+import { liftSpring } from './motion-primitives';
 import { SiteButton } from './site-button';
 
 const WA_PHONE = '359876003900';
@@ -69,11 +71,13 @@ const priceCategories: PriceCategory[] = [
 
 function CategoryColumn({ category }: { category: PriceCategory }) {
   return (
-    <div>
-      <div className="mb-6 flex flex-row flex-nowrap items-center justify-between gap-3 md:mb-8">
-        <h3 className="min-w-0 flex-1 text-[28px] font-medium uppercase leading-snug tracking-[0.02em] text-[color:var(--palette-p700)]">
-          {category.title}
-        </h3>
+    <div className="w-full min-w-0">
+      <div className="mb-6 w-full border-b border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_11%,var(--palette-bg-white))] pb-3 md:mb-8 md:pb-4">
+        <div className="flex justify-center md:justify-between">
+          <h3 className="min-w-0 w-full text-center text-[1.25rem] font-semibold uppercase leading-snug tracking-[0.02em] text-[color:var(--palette-p700)] md:w-auto md:flex-1 md:text-left md:text-[28px] md:font-medium">
+            {category.title}
+          </h3>
+        </div>
       </div>
       <ul className="flex flex-col gap-4 md:gap-3">
         {category.items.map((item, itemIndex) => {
@@ -130,18 +134,21 @@ const mainCategories = priceCategories.slice(0, 3);
 const vipCategory = priceCategories[3];
 
 function VipPassBanner() {
+  const reducedMotion = useReducedMotion();
   const price = vipCategory?.items[0]?.price ?? '€500';
   const vipHref = whatsappInquiryUrl(
     `Здравейте! Интересувам се от VIP PASS — ${price}. Пиша от ценоразписа на сайта.`,
   );
 
   return (
-    <a
+    <motion.a
       href={vipHref}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Запитване в WhatsApp за VIP PASS"
-      className="group block cursor-pointer touch-manipulation rounded-[14px] border border-[color:color-mix(in_srgb,var(--palette-p700)_20%,transparent)] bg-[color:var(--palette-bg-white)] px-5 py-7 text-inherit no-underline transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.995] active:bg-[color:color-mix(in_srgb,var(--palette-p700)_4%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)] md:px-9 md:py-9 lg:px-11 lg:py-10"
+      whileHover={reducedMotion ? undefined : { y: -3 }}
+      transition={liftSpring}
+      className="group block cursor-pointer touch-manipulation rounded-[14px] border border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_11%,var(--palette-bg-white))] bg-[color:var(--palette-bg-white)] px-5 py-7 text-inherit no-underline transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.995] active:bg-[color:color-mix(in_srgb,var(--palette-p700)_4%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)] md:px-9 md:py-9 lg:px-11 lg:py-10"
     >
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
         <div className="min-w-0 flex-1">
@@ -171,7 +178,7 @@ function VipPassBanner() {
           </SiteButton>
         </div>
       </div>
-    </a>
+    </motion.a>
   );
 }
 
@@ -180,7 +187,7 @@ export function PriceListSection() {
     <section id="prices" className="bg-background pt-16 pb-24 md:pt-24 md:pb-36">
       <div className="luxury-page">
         <h2
-          className="font-source-sans-3 mb-10 text-center text-4xl uppercase tracking-tight text-foreground md:mb-14 md:text-5xl lg:text-6xl"
+          className="font-source-sans-3 mb-10 text-center text-3xl uppercase leading-tight tracking-tight text-foreground sm:text-4xl md:mb-14 md:text-[52px]"
           style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
         >
           Ценоразпис

@@ -20,6 +20,11 @@
     @apply inline-flex w-auto max-w-none cursor-pointer items-center justify-center whitespace-nowrap rounded-full border-0 bg-[var(--palette-bg-white)] px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-medium leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-chocolate)] uppercase ring-1 ring-inset ring-[color:var(--btn-chocolate)] transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50 focus-visible:ring-offset-0;
   }
 
+  /** Hero: същата бяла „карта“ + кафяв текст като outline-chocolate, но без кафяв контур (бял ring върху бяло ≈ без видима линия) */
+  .sb-outline-chocolate-hero {
+    @apply inline-flex w-auto max-w-none cursor-pointer items-center justify-center whitespace-nowrap rounded-full border-0 bg-[var(--palette-bg-white)] px-[length:var(--btn-pad-x)] py-[length:var(--btn-pad-y)] font-sans text-[length:var(--btn-type-size)] font-medium leading-none tracking-[length:var(--btn-type-tracking)] text-[color:var(--btn-chocolate)] uppercase ring-1 ring-inset ring-[color:var(--palette-bg-white)] transition-[text-decoration] duration-200 hover:underline hover:decoration-1 hover:underline-offset-[0.22em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50 focus-visible:ring-offset-0;
+  }
+
   /* Икони (стрелки): същият 14px не важи; компактен квадрат с осезаема зона */
   .sb-icon-outline {
     @apply rounded-full border border-primary bg-transparent p-3 text-primary transition-[text-decoration,opacity] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50;

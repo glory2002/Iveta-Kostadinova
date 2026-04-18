@@ -157,7 +157,7 @@ export function TestimonialsSection() {
     <section className="bg-[color:var(--palette-bg)] pt-16 pb-24 md:pt-24 md:pb-36">
       <div className="luxury-page">
         <h2
-          className="font-source-sans-3 mb-10 text-center text-4xl uppercase tracking-tight text-foreground md:mb-14 md:text-5xl lg:text-6xl"
+          className="font-source-sans-3 mb-10 text-center text-3xl uppercase leading-tight tracking-tight text-foreground sm:text-4xl md:mb-14 md:text-[52px]"
           style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
         >
           Отзиви

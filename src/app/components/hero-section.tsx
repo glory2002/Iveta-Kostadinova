@@ -1,11 +1,19 @@
+import { motion, useReducedMotion } from 'motion/react';
+
 import heroImage from '../../assets/54ac056b03aa6fdd21921dc6ebcc985130e489ef.png';
 
+import { heroLine, heroStaggerParent, heroTitleStagger } from './motion-primitives';
 import { SiteButton } from './site-button';
 
 export type HeroVariant = 'a' | 'b';
 
 export function HeroSection({ variant = 'a' }: { variant?: HeroVariant }) {
   const isB = variant === 'b';
+  const reducedMotion = useReducedMotion();
+  const intro =
+    reducedMotion === true
+      ? ({ initial: 'visible' as const, animate: 'visible' as const } as const)
+      : ({ initial: 'hidden' as const, animate: 'visible' as const } as const);
 
   return (
     <section id="hero" className="relative h-[100dvh] min-h-[100dvh] overflow-hidden">
@@ -46,15 +54,18 @@ export function HeroSection({ variant = 'a' }: { variant?: HeroVariant }) {
       </div>
 
       <div className="relative z-10 box-border flex h-full min-h-0 flex-col justify-center pb-14 pt-[calc(4.75rem+env(safe-area-inset-top,0px))] luxury-page md:justify-center md:pb-12 md:pt-8">
-        <div
-          className={`w-full max-w-xl md:max-w-[min(36rem,42vw)] ${
+        <motion.div
+          {...intro}
+          variants={heroStaggerParent}
+          className={`w-full max-w-xl md:max-w-[min(36rem,42vw)] max-md:mt-12 md:mt-0 ${
             isB
               ? 'ml-4 translate-x-[12%] sm:ml-6 sm:translate-x-[16%] md:ml-8 md:translate-x-[20%]'
               : ''
           }`}
         >
-          <h1
+          <motion.h1
             lang="bg"
+            variants={heroTitleStagger}
             className={`mb-4 leading-[0.95] text-[color:var(--palette-bg-white)] drop-shadow-[0_1px_12px_color-mix(in_srgb,var(--palette-p700)_35%,transparent)] md:mb-6 ${
               isB
                 ? 'text-[2.35rem] tracking-[0.04em] md:text-[3.5rem] md:tracking-[0.045em] lg:text-[4rem] lg:tracking-[0.05em]'
@@ -78,48 +89,62 @@ export function HeroSection({ variant = 'a' }: { variant?: HeroVariant }) {
           >
             {isB ? (
               <>
-                <span className="block">ИВЕТА</span>
-                <span className="block">КОСТАДИНОВА</span>
+                <motion.span variants={heroLine} className="block">
+                  ИВЕТА
+                </motion.span>
+                <motion.span variants={heroLine} className="block">
+                  КОСТАДИНОВА
+                </motion.span>
               </>
             ) : (
               <>
-                <span className="block">Ивета</span>
-                <span className="block">Костадинова</span>
+                <motion.span variants={heroLine} className="block">
+                  Ивета
+                </motion.span>
+                <motion.span variants={heroLine} className="block">
+                  Костадинова
+                </motion.span>
               </>
             )}
-          </h1>
-          <p
+          </motion.h1>
+          <motion.p
             lang="en"
+            variants={heroLine}
             className="mb-8 text-sm uppercase leading-relaxed tracking-[0.16em] text-[color:color-mix(in_srgb,var(--palette-bg-white)_82%,transparent)] drop-shadow-[0_1px_8px_color-mix(in_srgb,var(--palette-p700)_30%,transparent)] md:mb-10 md:text-[15px] md:tracking-[0.18em]"
             style={
               isB
                 ? {
                     fontFamily: "'Manrope Web', sans-serif",
-                    fontWeight: 300,
-                    fontVariationSettings: "'wght' 300",
+                    fontWeight: 400,
+                    fontVariationSettings: "'wght' 400",
                   }
                 : {
                     fontFamily: "'Raleway Web', sans-serif",
-                    fontWeight: 300,
-                    fontVariationSettings: "'wght' 300",
+                    fontWeight: 400,
+                    fontVariationSettings: "'wght' 400",
                   }
             }
           >
             PMU Expert · Master Trainer · Phibrows Ambassador
-          </p>
+          </motion.p>
           {isB ? (
-            <SiteButton
-              asChild
-              variant="outlineChocolate"
-              className="w-auto max-w-none justify-center"
-            >
-              <a href="#services">Виж моите услуги</a>
-            </SiteButton>
-          ) : (
-            <div className="flex flex-row flex-wrap items-stretch gap-2 sm:items-center sm:gap-4">
+            <motion.div variants={heroLine}>
               <SiteButton
                 asChild
-                variant="outlineChocolate"
+                variant="outlineChocolateHero"
+                className="w-auto max-w-none justify-center"
+              >
+                <a href="#services">Виж моите услуги</a>
+              </SiteButton>
+            </motion.div>
+          ) : (
+            <motion.div
+              variants={heroLine}
+              className="flex flex-row flex-wrap items-stretch gap-2 sm:items-center sm:gap-4"
+            >
+              <SiteButton
+                asChild
+                variant="outlineChocolateHero"
                 className="min-w-0 max-w-none w-auto flex-1 justify-center sm:w-auto sm:flex-none"
               >
                 <a href="#services">Моите услуги</a>
@@ -131,9 +156,9 @@ export function HeroSection({ variant = 'a' }: { variant?: HeroVariant }) {
               >
                 <a href="#courses">Обучения</a>
               </SiteButton>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

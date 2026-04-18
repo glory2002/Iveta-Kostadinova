@@ -1,4 +1,7 @@
+import { motion, useReducedMotion } from 'motion/react';
+
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { liftHoverY, liftSpring } from './motion-primitives';
 import { SiteButton } from './site-button';
 
 interface Service {
@@ -44,6 +47,8 @@ const services: Service[] = [
 export type ServicesVariant = 'a' | 'b';
 
 export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }) {
+  const reducedMotion = useReducedMotion();
+
   if (variant === 'b') {
     return (
       <section
@@ -51,10 +56,12 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
         className="relative z-10 bg-[#ffffff] pt-6 pb-14 md:pb-20"
       >
         <div className="luxury-page box-border w-full min-w-0">
-          <div className="grid w-full grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4 md:gap-6">
+          <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-4 md:gap-3">
             {services.map((service, index) => (
-              <article
+              <motion.article
                 key={index}
+                whileHover={reducedMotion ? undefined : { y: liftHoverY }}
+                transition={liftSpring}
                 className="group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-transparent"
               >
                 <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-2xl">
@@ -79,7 +86,7 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
                     </SiteButton>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
@@ -92,10 +99,12 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
       id="services"
       className="relative z-10 -mt-px bg-[color:var(--palette-p700)] py-4 md:py-6 lg:py-8"
     >
-      <div className="relative z-10 luxury-page -mt-10 grid grid-cols-12 gap-x-4 gap-y-5 sm:gap-x-5 sm:gap-y-6 md:gap-6 md:-mt-14 lg:-mt-[4.5rem] lg:gap-8">
+      <div className="relative z-10 luxury-page -mt-10 grid grid-cols-12 gap-3 md:-mt-14 lg:-mt-[4.5rem]">
         {services.map((service, index) => (
-          <article
+          <motion.article
             key={index}
+            whileHover={reducedMotion ? undefined : { y: liftHoverY }}
+            transition={liftSpring}
             className="group col-span-6 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl bg-[color:var(--palette-bg-white)] shadow-[0_8px_28px_-14px_rgba(43,32,24,0.2)] md:col-span-12 md:min-h-[300px] md:flex-row md:rounded-[18px] md:shadow-none lg:col-span-6 lg:min-h-[320px]"
           >
             <div className="relative aspect-[5/4] w-full shrink-0 overflow-hidden rounded-l-[18px] rounded-r-2xl md:aspect-auto md:h-full md:min-h-full md:w-1/2 md:self-stretch">
@@ -105,8 +114,8 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
                 className="absolute inset-0 h-full w-full rounded-l-[18px] rounded-r-2xl object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               />
             </div>
-            <div className="flex w-full min-w-0 flex-1 flex-col items-start justify-start px-3 pb-5 pt-4 text-left sm:px-4 sm:pb-5 sm:pt-4 md:w-1/2 md:px-8 md:pb-10 md:pt-10 lg:px-10 lg:py-12">
-              <h3 className="mb-1 text-[18px] font-semibold uppercase leading-[1.12] tracking-[0.02em] text-[color:var(--palette-p700)] sm:mb-1.5 sm:leading-[1.1] md:mb-1.5 md:text-2xl md:font-medium md:leading-[1.08] md:tracking-[0.04em] lg:text-[28px] lg:leading-[1.1]">
+            <div className="flex w-full min-w-0 flex-1 flex-col items-center justify-start px-3 pb-5 pt-4 text-center sm:px-4 sm:pb-5 sm:pt-4 md:w-1/2 md:items-start md:px-8 md:pb-10 md:pt-10 md:text-left lg:px-10 lg:py-12">
+              <h3 className="mb-1 w-full text-[22px] font-semibold uppercase leading-[1.1] tracking-[0.02em] text-[color:var(--palette-p700)] sm:mb-1.5 sm:leading-[1.08] md:mb-1.5 md:text-2xl md:font-medium md:leading-[1.08] md:tracking-[0.04em] lg:text-[28px] lg:leading-[1.1]">
                 {service.title}
               </h3>
               <p className="mb-3 max-w-[20rem] text-xs font-normal uppercase leading-snug tracking-[0.14em] text-[color:var(--palette-p700)]/90 sm:mb-4 sm:text-sm sm:tracking-[0.18em] md:mb-4 md:max-w-none md:text-xs md:tracking-[0.14em] lg:text-sm lg:tracking-[0.16em]">
@@ -116,13 +125,13 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
                 <SiteButton
                   type="button"
                   variant="fillChocolate"
-                  className="w-full whitespace-nowrap max-md:text-[10px] max-md:leading-none max-md:tracking-[0.06em] transition-[text-decoration] duration-200 group-hover:underline group-hover:decoration-1 group-hover:underline-offset-[0.22em] md:w-fit md:max-w-[min(100%,280px)] md:self-start"
+                  className="w-full whitespace-nowrap max-md:text-xs max-md:leading-tight max-md:tracking-[0.08em] transition-[text-decoration] duration-200 group-hover:underline group-hover:decoration-1 group-hover:underline-offset-[0.22em] md:w-fit md:max-w-[min(100%,280px)] md:self-start"
                 >
                   {service.buttonText}
                 </SiteButton>
               </div>
             </div>
-          </article>
+          </motion.article>
         ))}
       </div>
     </section>

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { liftHoverY, liftSpring } from './motion-primitives';
 import { SiteButton } from './site-button';
 import {
   Carousel,
@@ -16,6 +18,10 @@ const CONSULT_URL = 'https://wa.me/359876003900';
 
 /** Цялата карта + долен панел — един и същ off-white (#FAF9F7), за да няма „рез“ срещу `bg-white`. */
 const CARD_BG_OFF_WHITE = 'bg-[color:var(--palette-bg-white)]';
+
+/** Много лек контур — едва по-тъмен от off-white картата, за разграничаване от чисто бял фон на секцията. */
+const CARD_BORDER =
+  'border border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_7%,var(--palette-bg-white))]';
 
 /** Хоризонтален inset в картата (панел + overlay заглавие): 32px → 40px; по-тесно на малки ширини. */
 const CARD_INNER_X = 'px-6 sm:px-8 xl:px-10';
@@ -86,16 +92,21 @@ const courses: Course[] = [
 ];
 
 const courseTitleClass =
-  'mb-0.5 text-2xl font-medium uppercase leading-[1.12] tracking-[0.02em] md:mb-1 md:text-[26px] md:leading-[1.08] lg:text-[28px] lg:leading-[1.1]';
+  'font-manrope-web mb-0.5 text-2xl font-medium uppercase leading-[1.12] tracking-[0.02em] md:mb-1 md:text-[26px] md:leading-[1.08] lg:text-[28px] lg:leading-[1.1]';
 
 const courseCardMetaLineClass =
   'min-w-0 text-sm font-normal leading-snug tracking-[0.02em] text-[color:var(--palette-p700)] md:text-[15px]';
 
 function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' | 'b' }) {
   const isOverlayTitle = variant === 'b';
+  const reducedMotion = useReducedMotion();
 
   return (
-    <article className={`group flex min-h-0 flex-col overflow-hidden rounded-[18px] ${CARD_BG_OFF_WHITE}`}>
+    <motion.article
+      whileHover={reducedMotion ? undefined : { y: liftHoverY }}
+      transition={liftSpring}
+      className={`group box-border flex min-h-0 flex-col overflow-hidden rounded-[18px] ${CARD_BORDER} ${CARD_BG_OFF_WHITE}`}
+    >
       <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-t-[18px] rounded-b-2xl">
         <ImageWithFallback
           src={course.image}
@@ -104,7 +115,7 @@ function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' |
         />
         {course.meta ? (
           <div className="pointer-events-none absolute left-2.5 top-2.5 z-[2] md:left-3 md:top-3">
-            <p className="max-w-[min(100%,13rem)] rounded-sm bg-[color:color-mix(in_srgb,var(--palette-p900)_78%,transparent)] px-2 py-1 text-left text-[9px] font-normal uppercase leading-tight tracking-[0.16em] text-[color:var(--palette-bg-white)] shadow-sm backdrop-blur-[2px] sm:text-[10px] sm:tracking-[0.17em] md:px-2 md:py-1.5 md:text-[11px] md:tracking-[0.19em]">
+            <p className="max-w-[min(100%,13rem)] rounded-sm border border-[color:color-mix(in_srgb,var(--palette-p700)_12%,transparent)] bg-[color:var(--palette-bg-white)] px-2 py-1 text-left text-[9px] font-normal uppercase leading-tight tracking-[0.16em] text-[color:var(--palette-p700)] shadow-sm sm:text-[10px] sm:tracking-[0.17em] md:px-2 md:py-1.5 md:text-[11px] md:tracking-[0.19em]">
               {course.meta.level}
             </p>
           </div>
@@ -185,7 +196,7 @@ function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' |
           </SiteButton>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -267,7 +278,7 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
     <section id="courses" className="bg-white pt-16 pb-24 md:pt-24 md:pb-36">
       <div className="luxury-page">
         <h2
-          className="font-source-sans-3 mb-10 text-left text-4xl uppercase tracking-tight text-foreground md:mb-14 md:text-5xl lg:text-6xl"
+          className="font-manrope-web mb-10 text-left text-3xl uppercase leading-tight tracking-tight text-foreground sm:text-4xl md:mb-14 md:text-[52px]"
           style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
         >
           Предстоящи курсове
@@ -276,7 +287,7 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
         {/* Мобилно: левият inset е на wrapper извън Embla трека — иначе transform на трека „залепва“ първата карта */}
         <div className="md:hidden">
           <div className="luxury-bleed-x">
-            <div className="box-border min-w-0 w-full pl-[max(1.5rem,var(--luxury-gutter),env(safe-area-inset-left,0px))] pr-0">
+            <div className="box-border min-w-0 w-full pl-[max(var(--luxury-gutter),env(safe-area-inset-left,0px))] pr-0">
               <Carousel
                 setApi={setApi}
                 opts={{

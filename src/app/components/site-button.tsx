@@ -17,6 +17,8 @@ const siteButtonVariants = cva(
         fillChocolate: 'sb-fill-chocolate',
         fillChocolateCompact: 'sb-fill-chocolate-compact',
         outlineChocolate: 'sb-outline-chocolate',
+        /** Hero: бяло пълнене + кафяв текст, без кафяв вътрешен контур */
+        outlineChocolateHero: 'sb-outline-chocolate-hero',
         iconOutline: 'sb-icon-outline',
         /** Стрелки върху бежов фон (секция курсове) */
         iconOutlineSand: 'sb-icon-outline border-primary text-primary',

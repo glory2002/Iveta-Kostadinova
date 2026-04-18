@@ -66,7 +66,8 @@
    * Ширина: min(1280px, 100% − 2×gutter) — винаги margin-inline: auto от `.luxury-page`.
    */
   --luxury-content-max: 1280px;
-  --luxury-gutter: 20px;
+  /** Под `md` (телефон): по-тесен хоризонтален inset; от 768px нагоре — по-долу в медиите. */
+  --luxury-gutter: 12px;
 
   --sidebar: var(--palette-bg-white);
   --sidebar-foreground: var(--palette-p700);
@@ -197,6 +198,12 @@
  */
 .font-source-sans-3 {
   font-family: 'Raleway Web', sans-serif;
+}
+
+/** Явно Manrope за отделни блокове (напр. заглавия в секция курсове). Виж `fonts.css` (Manrope Web). */
+.font-manrope-web {
+  font-family: 'Manrope Web', sans-serif;
+  font-feature-settings: 'locl' 1;
 }
 
 /**
