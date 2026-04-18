@@ -8,6 +8,8 @@ interface Service {
   buttonText: string;
 }
 
+const CONSULT_URL = 'https://wa.me/359876003900';
+
 const services: Service[] = [
   {
     title: 'ВЕЖДИ',
@@ -39,39 +41,86 @@ const services: Service[] = [
   }
 ];
 
-export function ServicesSection() {
+export type ServicesVariant = 'a' | 'b';
+
+export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }) {
+  if (variant === 'b') {
+    return (
+      <section
+        id="services"
+        className="relative z-10 bg-[#ffffff] pt-[14px] pb-14 md:pb-20"
+      >
+        <div className="box-border mx-auto w-full max-w-[min(100%,1920px)] px-[14px]">
+          <div className="grid w-full grid-cols-2 gap-[14px] md:grid-cols-4">
+          {services.map((service, index) => (
+            <article
+              key={index}
+              className="group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-transparent"
+            >
+              <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-2xl">
+                <ImageWithFallback
+                  src={service.image}
+                  alt={service.title}
+                  className="absolute inset-0 h-full w-full rounded-2xl object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+              </div>
+              <div className="flex flex-1 flex-col items-start justify-start pb-4 pt-4 text-left md:pb-5 md:pt-5">
+                <h3 className="mb-0.5 text-2xl font-medium uppercase leading-[1.12] tracking-[0.02em] text-[color:var(--palette-p700)] md:mb-1 md:text-[26px] md:leading-[1.08] lg:text-[28px] lg:leading-[1.1]">
+                  <span className="block">{service.title}</span>
+                </h3>
+                <p className="mb-0 mt-0.5 text-[14px] font-normal uppercase leading-snug tracking-[0.12em] text-[color:var(--palette-p700)]/80">
+                  {service.titleEn}
+                </p>
+                <div className="mt-auto w-full pt-[20px]">
+                  <SiteButton asChild variant="fillChocolate" className="w-fit">
+                    <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer">
+                      Запиши час
+                    </a>
+                  </SiteButton>
+                </div>
+              </div>
+            </article>
+          ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       id="services"
-      className="relative z-10 -mt-px bg-[color:var(--palette-p700)] px-4 pt-6 pb-12 md:px-6 md:pt-8 md:pb-20 lg:px-12"
+      className="relative z-10 -mt-px bg-[color:var(--palette-p700)] py-4 md:py-6 lg:py-8"
     >
-      <div className="relative z-10 mx-auto -mt-10 grid w-full max-w-7xl grid-cols-1 gap-5 md:-mt-14 md:gap-6 lg:-mt-[4.5rem] lg:grid-cols-2">
+      <div className="relative z-10 luxury-page -mt-10 grid grid-cols-12 gap-4 md:gap-6 md:-mt-14 lg:-mt-[4.5rem]">
         {services.map((service, index) => (
           <article
             key={index}
-            className="group flex min-h-[280px] flex-col overflow-hidden rounded-[18px] bg-[color:var(--palette-bg-white)] sm:min-h-[300px] sm:flex-row lg:min-h-[320px]"
+            className="group col-span-6 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl bg-[color:var(--palette-bg-white)] shadow-[0_8px_28px_-14px_rgba(43,32,24,0.2)] md:col-span-12 md:min-h-[300px] md:flex-row md:rounded-[18px] md:shadow-none lg:col-span-6 lg:min-h-[320px]"
           >
-            <div className="relative h-56 w-full shrink-0 overflow-hidden sm:h-auto sm:min-h-[280px] sm:w-1/2 md:min-h-[300px]">
+            <div className="relative aspect-[5/4] w-full shrink-0 overflow-hidden rounded-l-[18px] rounded-r-2xl md:aspect-auto md:h-full md:min-h-full md:w-1/2 md:self-stretch">
               <ImageWithFallback
                 src={service.image}
                 alt={service.title}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                className="absolute inset-0 h-full w-full rounded-l-[18px] rounded-r-2xl object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               />
             </div>
-            <div className="flex w-full flex-1 flex-col items-center justify-center px-6 py-8 text-center sm:w-1/2 sm:px-8 sm:py-10">
-              <h3 className="mb-2 text-[28px] font-medium uppercase leading-[1.1] tracking-[0.04em] text-[color:var(--palette-p700)]">
+            <div className="flex w-full min-w-0 flex-1 flex-col items-center px-2 pb-4 pt-3 text-center sm:px-3 sm:pb-5 sm:pt-4 md:w-1/2 md:items-start md:justify-start md:px-8 md:pb-10 md:pt-10 md:text-left lg:px-10 lg:py-12">
+              <h3 className="mb-1 text-[15px] font-semibold uppercase leading-[1.15] tracking-[0.02em] text-[color:var(--palette-p700)] sm:mb-1.5 sm:text-base md:mb-1.5 md:text-lg md:font-medium md:tracking-[0.04em] lg:text-[28px]">
                 {service.title}
               </h3>
-              <p className="mb-6 text-sm font-normal uppercase leading-snug tracking-[0.16em] text-[color:var(--palette-p700)]/85 sm:mb-8">
+              <p className="mb-3 max-w-[20rem] text-xs font-normal uppercase leading-snug tracking-[0.14em] text-[color:var(--palette-p700)]/90 sm:mb-4 sm:text-sm sm:tracking-[0.18em] md:mb-4 md:max-w-none md:text-xs md:tracking-[0.14em] lg:text-sm lg:tracking-[0.16em]">
                 {service.titleEn}
               </p>
-              <SiteButton
-                type="button"
-                variant="fillChocolate"
-                className="w-full max-w-[280px] transition-[text-decoration] duration-200 group-hover:underline group-hover:decoration-1 group-hover:underline-offset-[0.22em]"
-              >
-                {service.buttonText}
-              </SiteButton>
+              <div className="mt-auto w-full pt-6 md:pt-10">
+                <SiteButton
+                  type="button"
+                  variant="fillChocolate"
+                  className="mx-auto w-fit max-w-[min(100%,280px)] self-center max-md:text-[10px] max-md:leading-none max-md:tracking-[0.06em] transition-[text-decoration] duration-200 group-hover:underline group-hover:decoration-1 group-hover:underline-offset-[0.22em] md:mx-0 md:self-start"
+                >
+                  {service.buttonText}
+                </SiteButton>
+              </div>
             </div>
           </article>
         ))}

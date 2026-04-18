@@ -1,273 +1,203 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useState, useRef, useMemo } from 'react';
 
 import { SiteButton } from './site-button';
+import { ImageWithFallback } from './figma/ImageWithFallback';
 
 interface Testimonial {
   name: string;
   text: string;
-  /** Портрет за кръглата снимка; смени с реални снимки на клиенти при нужда */
-  avatar: string;
+  /** Малък ред под името (small caps): роля, издание, „клиент“ */
+  role?: string;
+  /** Портрет за карусела (кръгъл thumbnail). */
+  photo?: string;
 }
 
-function testimonialInitials(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
+function initialsFromName(name: string): string {
+  const cleaned = name.replace(/\./g, ' ').trim();
+  const parts = cleaned.split(/\s+/).filter(Boolean);
   if (parts.length >= 2) {
-    const a = parts[0][0] ?? '';
-    const b = parts[parts.length - 1][0] ?? '';
-    return (a + b).toUpperCase();
+    const a = parts[0]?.[0] ?? '';
+    const b = parts[1]?.[0] ?? '';
+    return `${a}${b}`.toUpperCase();
   }
   return (parts[0]?.slice(0, 2) ?? '?').toUpperCase();
 }
 
 const testimonials: Testimonial[] = [
   {
+    name: 'Александра К.',
+    role: 'РЕДАКТОР, ELLE БЪЛГАРИЯ',
+    photo: 'https://i.pravatar.cc/128?img=12',
+    text: 'Нивото на прецизност е друго измерение. Посещавам студиото от седем години и всеки път е безупречно.'
+  },
+  {
     name: 'Цвети Петрова',
-    text: 'За мен Ивета е истински професионалист. Ходила съм и при други дами, които правят микроблейдинг на вежди, нищо общо като качество и отношение. Бих се доверила само на нея занапред.',
-    avatar:
-      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=face'
+    role: 'клиент',
+    photo: 'https://i.pravatar.cc/128?img=25',
+    text: 'За мен Ивета е истински професионалист. Ходила съм и при други дами, които правят микроблейдинг на вежди, нищо общо като качество и отношение. Бих се доверила само на нея занапред.'
   },
   {
     name: 'Мария И.',
-    text: 'Невероятен резултат! Веждите ми изглеждат абсолютно естествено.',
-    avatar:
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face'
+    role: 'клиент',
+    photo: 'https://i.pravatar.cc/128?img=33',
+    text: 'Невероятен резултат! Веждите ми изглеждат абсолютно естествено.'
   },
   {
     name: 'Ana D.',
-    text: 'Много съм доволна от резултата. Иве, супер си!',
-    avatar:
-      'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face'
+    role: 'клиент',
+    photo: 'https://i.pravatar.cc/128?img=41',
+    text: 'Много съм доволна от резултата. Иве, супер си!'
   },
   {
     name: 'Петя Г.',
-    text: 'Процедурата беше безболезнена и резултатът надмина очакванията ми.',
-    avatar:
-      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&h=200&fit=crop&crop=face'
+    role: 'клиент',
+    photo: 'https://i.pravatar.cc/128?img=47',
+    text: 'Процедурата беше безболезнена и резултатът надмина очакванията ми.'
   },
   {
     name: 'Силвия К.',
-    text: 'Перфектни вежди без да губя време всяка сутрин!',
-    avatar:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face'
+    role: 'клиент',
+    photo: 'https://i.pravatar.cc/128?img=52',
+    text: 'Перфектни вежди без да губя време всяка сутрин!'
   },
   {
     name: 'Десислава Т.',
-    text: 'Отлична корекция. Елена работи прецизно и с голямо внимание.',
-    avatar:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face'
+    role: 'клиент',
+    photo: 'https://i.pravatar.cc/128?img=68',
+    text: 'Отлична корекция. Работи се прецизно и с голямо внимание.'
   }
 ];
 
-function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
-  const [avatarFailed, setAvatarFailed] = useState(false);
-  const initials = testimonialInitials(testimonial.name);
-
+function TestimonialSlide({
+  testimonial,
+  slideIndex,
+  total
+}: {
+  testimonial: Testimonial;
+  slideIndex: number;
+  total: number;
+}) {
   return (
-    <div className="flex h-full min-h-[280px] flex-col rounded-[18px] border border-border/40 bg-[color:var(--palette-bg-white)] p-6 md:min-h-[420px] md:p-10">
-      <div className="mb-4 flex select-none items-center gap-0.5 md:mb-5 md:gap-1" aria-hidden>
-        {Array.from({ length: 5 }, (_, i) => (
-          <Star
-            key={i}
-            className="size-[1.05rem] shrink-0 fill-[color:var(--palette-bg)] text-[color:var(--palette-bg)] md:size-5"
-            strokeWidth={1.2}
-            aria-hidden
-          />
-        ))}
-      </div>
-      <p className="font-source-sans-3 mb-6 flex-grow text-lg font-light leading-[1.2] text-foreground md:mb-8 md:text-xl">
-        {testimonial.text}
-      </p>
-      <div className="mt-auto flex items-center gap-3 text-left md:gap-4">
-        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-primary/15 ring-2 ring-primary/25 md:h-14 md:w-14">
-          {!avatarFailed ? (
-            <img
-              src={testimonial.avatar}
+    <div className="relative px-2 pb-2 pt-4 md:px-8 md:pb-4 md:pt-6">
+      <blockquote
+        className="font-source-sans-3 mx-auto max-w-[34rem] text-center text-[1.45rem] font-light italic leading-[1.35] text-[color:var(--palette-p700)] md:max-w-[40rem] md:text-[1.85rem] md:leading-[1.32] lg:text-[2.1rem]"
+        style={{ fontWeight: 300 }}
+      >
+        „{testimonial.text}“
+      </blockquote>
+
+      <footer className="mt-10 flex flex-col items-center justify-center gap-3 md:mt-12 md:flex-row md:gap-4">
+        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-[color:color-mix(in_srgb,var(--palette-p700)_18%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_65%,var(--palette-bg))] shadow-[0_1px_8px_color-mix(in_srgb,var(--palette-p700)_10%,transparent)] md:h-14 md:w-14">
+          {testimonial.photo ? (
+            <ImageWithFallback
+              src={testimonial.photo}
               alt=""
-              width={112}
-              height={112}
               className="h-full w-full object-cover"
               loading="lazy"
               decoding="async"
-              onError={() => setAvatarFailed(true)}
             />
           ) : (
-            <span className="flex h-full w-full items-center justify-center text-sm text-foreground md:text-base" style={{ fontWeight: 600 }}>
-              {initials}
+            <span
+              className="font-source-sans-3 flex h-full w-full items-center justify-center text-[13px] tabular-nums text-[color:var(--palette-p700)] md:text-sm"
+              style={{ fontWeight: 500 }}
+              aria-hidden
+            >
+              {initialsFromName(testimonial.name)}
             </span>
           )}
         </div>
-        <p className="min-w-0 text-sm tracking-wide text-muted-foreground md:text-base" style={{ fontWeight: 500 }}>
-          <span className="block text-foreground" style={{ fontWeight: 600 }}>
+        <div className="text-center md:text-left">
+          <p
+            className="font-source-sans-3 text-lg text-[color:var(--palette-p700)] md:text-xl"
+            style={{ fontWeight: 500 }}
+          >
             {testimonial.name}
-          </span>
-          <span className="text-[15px] text-muted-foreground/90">клиент</span>
-        </p>
-      </div>
+          </p>
+          <p className="font-source-sans-3 mt-1 text-[10px] font-normal uppercase tracking-[0.22em] text-[color:var(--palette-p700)]/65 md:mt-1.5 md:text-[11px] md:tracking-[0.26em]">
+            {testimonial.role ?? 'клиент'}
+          </p>
+        </div>
+      </footer>
+
+      <p className="sr-only">
+        Отзив {slideIndex} от {total}
+      </p>
     </div>
   );
 }
 
 export function TestimonialsSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [mobileIndex, setMobileIndex] = useState(0);
-  const [isDesktop, setIsDesktop] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : false
-  );
   const sliderRef = useRef<Slider>(null);
-  const mobileScrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)');
-    const apply = () => setIsDesktop(mq.matches);
-    mq.addEventListener('change', apply);
-    return () => mq.removeEventListener('change', apply);
-  }, []);
-
-  const updateMobileIndex = useCallback(() => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    const slides = el.querySelectorAll<HTMLElement>('[data-testimonial-slide]');
-    if (!slides.length) return;
-    const gap = 12;
-    const step = slides[0].offsetWidth + gap;
-    if (step <= 0) return;
-    const idx = Math.round(el.scrollLeft / step);
-    setMobileIndex(Math.min(Math.max(0, idx), testimonials.length - 1));
-  }, []);
-
-  const scrollMobile = (dir: 'prev' | 'next') => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    const slides = el.querySelectorAll<HTMLElement>('[data-testimonial-slide]');
-    const slide = slides[0];
-    if (!slide) return;
-    const gap = 12;
-    const delta = slide.offsetWidth + gap;
-    el.scrollBy({ left: dir === 'next' ? delta : -delta, behavior: 'smooth' });
-  };
 
   const settings = useMemo(
     () => ({
       dots: false,
       infinite: true,
-      speed: 500,
-      slidesToShow: 3,
+      fade: true,
+      speed: 600,
+      slidesToShow: 1,
       slidesToScroll: 1,
       autoplay: true,
-      autoplaySpeed: 4000,
+      autoplaySpeed: 5200,
       pauseOnHover: true,
-      beforeChange: (_current: number, next: number) => setCurrentSlide(next),
       arrows: false,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1
-          }
-        }
-      ]
+      beforeChange: (_current: number, next: number) => setCurrentSlide(next)
     }),
     []
   );
 
-  const displayIndex = isDesktop ? currentSlide : mobileIndex;
-  const countLabel = `${displayIndex + 1} / ${testimonials.length}`;
+  const n = testimonials.length;
 
   return (
-    <section className="bg-[color:var(--palette-bg)] py-12 md:py-24 px-4 md:px-6 lg:px-12">
-      <div className="mx-auto max-w-7xl">
+    <section className="bg-[color:var(--palette-bg)] pt-16 pb-24 md:pt-24 md:pb-36">
+      <div className="luxury-page">
         <h2
-          className="font-source-sans-3 mb-10 text-center text-4xl tracking-tight text-foreground md:mb-14 md:text-5xl lg:text-6xl"
+          className="font-source-sans-3 mb-10 text-center text-4xl uppercase tracking-tight text-foreground md:mb-14 md:text-5xl lg:text-6xl"
           style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
         >
           Отзиви
         </h2>
 
-        <div className="relative">
-          <div className="-mx-4 md:-mx-6 lg:-mx-12">
-            {isDesktop ? (
-              <Slider {...settings} ref={sliderRef}>
-                {testimonials.map((testimonial, index) => (
-                  <div key={index} className="px-2 md:px-4">
-                    <TestimonialCard testimonial={testimonial} />
-                  </div>
-                ))}
-              </Slider>
-            ) : (
-              <div
-                ref={mobileScrollRef}
-                onScroll={updateMobileIndex}
-                className="flex gap-3 overflow-x-auto overscroll-x-contain scroll-smooth snap-x snap-mandatory pb-1 [scrollbar-width:thin] touch-pan-x"
-              >
-                {testimonials.map((testimonial, index) => (
-                  <div
-                    key={index}
-                    data-testimonial-slide
-                    className="snap-start shrink-0 w-[min(88vw,26rem)]"
-                  >
-                    <TestimonialCard testimonial={testimonial} />
-                  </div>
-                ))}
+        <div className="relative mx-auto max-w-4xl">
+          <Slider {...settings} ref={sliderRef}>
+            {testimonials.map((testimonial, index) => (
+              <div key={testimonial.name + index}>
+                <TestimonialSlide testimonial={testimonial} slideIndex={index + 1} total={n} />
               </div>
-            )}
-          </div>
+            ))}
+          </Slider>
 
-          <div className="flex items-center justify-center mt-6 md:mt-8">
-            <div className="flex items-center gap-3 md:gap-4">
+          <div
+            className="mt-10 flex justify-center md:mt-14"
+            role="group"
+            aria-label="Навигация в отзивите"
+          >
+            <div className="flex items-center gap-4 md:gap-5">
               <SiteButton
                 type="button"
                 variant="iconOutline"
-                onClick={() =>
-                  isDesktop ? sliderRef.current?.slickPrev() : scrollMobile('prev')
-                }
+                onClick={() => sliderRef.current?.slickPrev()}
                 aria-label="Предишен отзив"
+                className="border-[color:color-mix(in_srgb,var(--palette-p700)_22%,transparent)] text-[color:var(--palette-p700)] hover:bg-[color:color-mix(in_srgb,var(--palette-p700)_6%,transparent)]"
               >
-                <ChevronLeft size={18} className="md:w-5 md:h-5" />
+                <ArrowLeft className="size-4 shrink-0" />
               </SiteButton>
-              <p
-                className="min-w-[50px] text-center text-base text-muted-foreground md:min-w-[60px] md:text-lg"
-                style={{ fontWeight: 500 }}
-              >
-                {countLabel}
-              </p>
+              <span className="font-source-sans-3 min-w-[3rem] text-center text-xs tabular-nums tracking-[0.14em] text-[color:var(--palette-p700)]/55 md:text-sm">
+                {currentSlide + 1} / {n}
+              </span>
               <SiteButton
                 type="button"
                 variant="iconOutline"
-                onClick={() =>
-                  isDesktop ? sliderRef.current?.slickNext() : scrollMobile('next')
-                }
+                onClick={() => sliderRef.current?.slickNext()}
                 aria-label="Следващ отзив"
+                className="border-[color:color-mix(in_srgb,var(--palette-p700)_22%,transparent)] text-[color:var(--palette-p700)] hover:bg-[color:color-mix(in_srgb,var(--palette-p700)_6%,transparent)]"
               >
-                <ChevronRight size={18} className="md:w-5 md:h-5" />
-              </SiteButton>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-16 text-center md:mt-24">
-          <div className="mx-auto max-w-4xl p-8 md:p-16">
-            <h3
-              className="font-source-sans-3 mb-4 text-4xl tracking-tight text-foreground md:mb-6 md:text-5xl lg:text-6xl"
-              style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
-            >
-              Готови за промяната?
-            </h3>
-            <p className="font-source-sans-3 mb-6 text-lg font-normal text-muted-foreground md:mb-10 md:text-xl">
-              Резервирайте консултация
-            </p>
-            <div className="flex flex-col justify-center gap-4 sm:flex-row md:gap-6">
-              <SiteButton asChild variant="fillChocolate">
-                <a href="https://wa.me/359876003900" target="_blank" rel="noopener noreferrer">
-                  Свържи Се С Мен
-                </a>
-              </SiteButton>
-              <SiteButton type="button" variant="outlinePrimary">
-                Instagram
+                <ArrowRight className="size-4 shrink-0" />
               </SiteButton>
             </div>
           </div>

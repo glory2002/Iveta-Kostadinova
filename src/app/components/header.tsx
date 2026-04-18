@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router';
 import { Menu, X } from 'lucide-react';
 
 import { SiteButton } from './site-button';
 
 const CONSULT_URL = 'https://wa.me/359876003900';
 
-/** Header — layout aligned with Figma (Iveta-Kostadinova, node 3:77): logo left, nav center, CTA right. */
-export function Header() {
+export type HeaderVariant = 'a' | 'b';
+
+/** Header — вариант A: навигация надясно. Вариант B: навигация центрирана (макет клиент). */
+export function Header({ variant = 'a' }: { variant?: HeaderVariant }) {
   /** Най-горе: прозрачен бар. След скрол надолу (>50px): off-white лента. */
   const [solidHeader, setSolidHeader] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -62,10 +65,16 @@ export function Header() {
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div className="relative z-10 mx-auto max-w-[1440px] !bg-transparent px-5 md:px-8 lg:px-12 xl:px-16">
-        <div className="flex min-h-[4.5rem] w-full items-center gap-3 md:min-h-[5rem] md:gap-6">
-          {/* Left: logo */}
-          <div className="flex min-w-0 shrink-0 items-center gap-2.5 md:gap-3">
+      <div className="relative z-10 luxury-page !bg-transparent">
+        <div
+          className={`relative flex min-h-[4.5rem] w-full items-center gap-3 md:min-h-[5rem] md:gap-6 ${variant === 'b' ? 'justify-between' : ''}`}
+        >
+          {/* Left: logo → начална страница за избор на вариант */}
+          <Link
+            to="/"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex min-w-0 shrink-0 items-center gap-2.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 md:gap-3"
+          >
             <div className="flex h-9 w-9 shrink-0 items-center justify-center md:h-11 md:w-11">
               <img
                 src="https://static.wixstatic.com/media/4de890_96ec563965c84123a035a64c11346816~mv2.png/v1/fill/w_118,h_162,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/phi_logo_gold_cropped.png"
@@ -73,15 +82,14 @@ export function Header() {
                 className="h-full w-full object-contain"
               />
             </div>
-            <span className={logoClass} style={{ fontWeight: 500 }}>
+            <span className={`hidden md:inline-block ${logoClass}`} style={{ fontWeight: 500 }}>
               PHI.BG
             </span>
-          </div>
+          </Link>
 
-          {/* Дясно: навигация до CTA (подравнени надясно) */}
-          <div className="ml-auto flex min-w-0 flex-1 items-center justify-end gap-4 md:gap-6 lg:gap-8">
+          {variant === 'b' ? (
             <nav
-              className="hidden min-w-0 items-center justify-end gap-6 md:flex lg:gap-10 xl:gap-12"
+              className="absolute left-1/2 hidden min-w-0 -translate-x-1/2 items-center gap-6 md:flex lg:gap-10"
               aria-label="Основна навигация"
             >
               <a href="#services" className={desktopNavLinkClass}>
@@ -94,6 +102,32 @@ export function Header() {
                 За мен
               </a>
             </nav>
+          ) : null}
+
+          {/* Дясно: навигация (само A) + CTA + мобилно меню */}
+          <div
+            className={
+              variant === 'b'
+                ? 'flex shrink-0 items-center gap-3 md:gap-4'
+                : 'ml-auto flex min-w-0 flex-1 items-center justify-end gap-4 md:gap-6 lg:gap-8'
+            }
+          >
+            {variant === 'a' ? (
+              <nav
+                className="hidden min-w-0 items-center justify-end gap-6 md:flex lg:gap-10 xl:gap-12"
+                aria-label="Основна навигация"
+              >
+                <a href="#services" className={desktopNavLinkClass}>
+                  Услуги
+                </a>
+                <a href="#courses" className={desktopNavLinkClass}>
+                  Обучения
+                </a>
+                <a href="#footer" className={desktopNavLinkClass}>
+                  За мен
+                </a>
+              </nav>
+            ) : null}
 
             <SiteButton asChild variant="fillChocolate" className="hidden shrink-0 md:inline-flex">
               <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer">

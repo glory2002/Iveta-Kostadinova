@@ -2,51 +2,119 @@ import heroImage from '../../assets/54ac056b03aa6fdd21921dc6ebcc985130e489ef.png
 
 import { SiteButton } from './site-button';
 
-export function HeroSection() {
+export type HeroVariant = 'a' | 'b';
+
+export function HeroSection({ variant = 'a' }: { variant?: HeroVariant }) {
+  const isB = variant === 'b';
+
   return (
-    <section id="hero" className="relative min-h-screen overflow-hidden md:min-h-[85vh]">
-      {/* Пълна височина отгоре — под прозрачния header се вижда снимката, не body фона */}
+    <section id="hero" className="relative h-[100dvh] min-h-[100dvh] overflow-hidden">
       <div className="absolute inset-0">
         <img
           src={heroImage}
           alt="Ивета Костадинова"
           className="h-full w-full object-cover object-center"
         />
-        {/* Само тъмен „винет“ отляво за бял текст — без светъл/бежов wash; снимката си личи */}
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[color:color-mix(in_srgb,var(--palette-p700)_52%,transparent)] from-0% via-[color:color-mix(in_srgb,var(--palette-p700)_18%,transparent)] via-[32%] to-transparent to-[58%] sm:via-[35%] sm:to-[62%] md:via-[38%] md:to-[58%] lg:to-[56%]"
+          className={
+            isB
+              ? 'pointer-events-none absolute inset-0 bg-gradient-to-r from-[color:color-mix(in_srgb,var(--palette-p700)_22%,transparent)] from-0% via-[color:color-mix(in_srgb,var(--palette-p700)_10%,transparent)] via-[45%] to-transparent to-[82%]'
+              : 'pointer-events-none absolute inset-0 bg-gradient-to-r from-[color:color-mix(in_srgb,var(--palette-p700)_38%,transparent)] from-0% via-[color:color-mix(in_srgb,var(--palette-p700)_14%,transparent)] via-[34%] to-transparent to-[60%] sm:via-[36%] sm:to-[64%] md:via-[32%] md:to-[64%] lg:to-[62%]'
+          }
           aria-hidden
         />
-        {/* Долу — плавно към секция „Услуги“ */}
+        {!isB ? (
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] min-h-[52%]"
+            style={{
+              background:
+                'linear-gradient(to top, var(--palette-p700) 0%, color-mix(in srgb, var(--palette-p700) 88%, transparent) 18%, color-mix(in srgb, var(--palette-p700) 52%, transparent) 38%, color-mix(in srgb, var(--palette-p700) 22%, transparent) 58%, transparent 100%)',
+            }}
+            aria-hidden
+          />
+        ) : null}
+        {/* Cinematic: вариант A — по-светъл, за да не „реже“; B — по-силен контраст */}
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] min-h-[42%] bg-gradient-to-t from-[color:var(--palette-p700)] from-[8%] via-[color:color-mix(in_srgb,var(--palette-p700)_42%,transparent)] to-transparent"
+          className="pointer-events-none absolute inset-0 z-[2]"
+          style={{
+            background: isB
+              ? 'linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 30%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.05) 70%, rgba(0,0,0,0) 85%)'
+              : 'linear-gradient(90deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.12) 32%, rgba(0,0,0,0.06) 58%, rgba(0,0,0,0.02) 78%, rgba(0,0,0,0) 88%)',
+          }}
           aria-hidden
         />
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1440px] min-h-[calc(100dvh-4.5rem)] flex-col justify-end px-6 pb-14 pt-8 md:min-h-[calc(85vh-5rem)] md:justify-center md:pb-12 md:pl-8 lg:pl-12 xl:pl-16">
-        <div className="w-full max-w-xl md:max-w-[min(36rem,42vw)]">
+      <div className="relative z-10 box-border flex h-full min-h-0 flex-col justify-center pb-14 pt-[calc(4.75rem+env(safe-area-inset-top,0px))] luxury-page md:justify-center md:pb-12 md:pt-8">
+        <div
+          className={`w-full max-w-xl md:max-w-[min(36rem,42vw)] ${
+            isB
+              ? 'ml-4 translate-x-[12%] sm:ml-6 sm:translate-x-[16%] md:ml-8 md:translate-x-[20%]'
+              : ''
+          }`}
+        >
           <h1
-            className="mb-4 text-[2.5rem] uppercase leading-[0.95] tracking-tight text-[color:var(--palette-bg-white)] drop-shadow-[0_1px_12px_color-mix(in_srgb,var(--palette-p700)_35%,transparent)] md:mb-6 md:text-[3.25rem] lg:text-[4.25rem] xl:text-[4.75rem]"
-            style={{ fontWeight: 300, letterSpacing: '-0.02em' }}
+            lang={isB ? 'bg' : undefined}
+            className={`mb-4 leading-[0.95] text-[color:var(--palette-bg-white)] drop-shadow-[0_1px_12px_color-mix(in_srgb,var(--palette-p700)_35%,transparent)] md:mb-6 ${
+              isB
+                ? 'text-[2.35rem] tracking-[0.04em] md:text-[3.5rem] md:tracking-[0.045em] lg:text-[4rem] lg:tracking-[0.05em]'
+                : 'uppercase tracking-tight text-[2.5rem] md:text-[3.25rem] lg:text-[4.25rem] xl:text-[4.75rem]'
+            }`}
+            style={{
+              fontWeight: isB ? 400 : 300,
+              letterSpacing: isB ? undefined : '-0.02em',
+              ...(isB
+                ? {
+                    fontFamily: "'Commissioner', 'Manrope', 'Source Sans 3', sans-serif",
+                    fontFeatureSettings: '"locl" 1',
+                  }
+                : {}),
+            }}
           >
-            <span className="block">Ивета</span>
-            <span className="block">Костадинова</span>
+            {isB ? (
+              <>
+                <span className="block">ИВЕТА</span>
+                <span className="block">КОСТАДИНОВА</span>
+              </>
+            ) : (
+              <>
+                <span className="block">Ивета</span>
+                <span className="block">Костадинова</span>
+              </>
+            )}
           </h1>
           <p
-            className="mb-8 text-[20px] leading-snug tracking-[0.2em] text-[color:color-mix(in_srgb,var(--palette-bg-white)_82%,transparent)] drop-shadow-[0_1px_8px_color-mix(in_srgb,var(--palette-p700)_30%,transparent)] md:mb-10"
+            className="mb-8 text-sm uppercase leading-relaxed tracking-[0.16em] text-[color:color-mix(in_srgb,var(--palette-bg-white)_82%,transparent)] drop-shadow-[0_1px_8px_color-mix(in_srgb,var(--palette-p700)_30%,transparent)] md:mb-10 md:text-[15px] md:tracking-[0.18em]"
             style={{ fontWeight: 300 }}
           >
-            PMU EXPERT · 2015
+            PMU Expert · Master Trainer · Phibrows Ambassador
           </p>
-          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-            <SiteButton asChild variant="fillChocolate" className="w-full sm:w-auto">
-              <a href="#services">Моите услуги</a>
+          {isB ? (
+            <SiteButton
+              asChild
+              variant="outlineChocolate"
+              className="w-auto max-w-none justify-center"
+            >
+              <a href="#services">Виж моите услуги</a>
             </SiteButton>
-            <SiteButton asChild variant="outlineOffWhite" className="w-full sm:w-auto">
-              <a href="#courses">Моите обучения</a>
-            </SiteButton>
-          </div>
+          ) : (
+            <div className="flex flex-row flex-wrap items-stretch gap-2 sm:items-center sm:gap-4">
+              <SiteButton
+                asChild
+                variant="outlineChocolate"
+                className="min-w-0 max-w-none w-auto flex-1 justify-center sm:w-auto sm:flex-none"
+              >
+                <a href="#services">Моите услуги</a>
+              </SiteButton>
+              <SiteButton
+                asChild
+                variant="outlineOffWhite"
+                className="min-w-0 max-w-none w-auto flex-1 justify-center sm:w-auto sm:flex-none"
+              >
+                <a href="#courses">Обучения</a>
+              </SiteButton>
+            </div>
+          )}
         </div>
       </div>
     </section>

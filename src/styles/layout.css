@@ -1,0 +1,30 @@
+/**
+ * Premium page shell: центриран контейнер max 1280px, хоризонтален inset чрез
+ * `width: min(1280px, 100% − 2×--luxury-gutter)` + `margin-inline: auto`.
+ * `--luxury-gutter`: 20 / 28 / 40 / 48px по брейкпойнти (виж `theme.css`).
+ * За карусел/edge-to-edge: `.luxury-bleed-x` (viewport breakout).
+ */
+@layer components {
+  .luxury-page {
+    box-sizing: border-box;
+    width: min(var(--luxury-content-max), calc(100% - 2 * var(--luxury-gutter)));
+    max-width: min(var(--luxury-content-max), calc(100% - 2 * var(--luxury-gutter)));
+    margin-inline: auto;
+    min-width: 0;
+  }
+
+  .luxury-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(0.75rem, 2.2vw, 2.75rem);
+    width: 100%;
+  }
+
+  /** Пълна ширина на вюпорта; ползвай с `px-[var(--luxury-gutter)]` за подравняване на първи/последен елемент */
+  .luxury-bleed-x {
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    box-sizing: border-box;
+  }
+}

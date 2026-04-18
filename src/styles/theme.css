@@ -1,10 +1,13 @@
 @custom-variant dark (&:is(.dark *));
 
 /**
- * Палитра — само тези 4 цвята (Figma):
- * Primary-700 #5A402B | Primary-500 #8D6F59 | Background #DCCBBB | Background-white #FAF9F7
+ * Палитра (Figma + разширение):
+ * Primary-900 #3D2A1D (най-тъмен кафяв) | Primary-700 #5A402B | Primary-500 #8D6F59
+ * | Background #DCCBBB | Background-white #FAF9F7
  */
 :root {
+  /** По-тъмен кафяв от p700 — футър, акцентни тъмни площи */
+  --palette-p900: #3d2a1d;
   --palette-p700: #5a402b;
   --palette-p500: #8d6f59;
   --palette-bg: #dccbbb;
@@ -58,6 +61,13 @@
   --btn-pad-y: 16px;
   --btn-pad-x: 32px;
 
+  /**
+   * Центриран контейнер (beauty / personal brand): max 1280px, хоризонтален inset по брейкпойнти.
+   * Ширина: min(1280px, 100% − 2×gutter) — винаги margin-inline: auto от `.luxury-page`.
+   */
+  --luxury-content-max: 1280px;
+  --luxury-gutter: 20px;
+
   --sidebar: var(--palette-bg-white);
   --sidebar-foreground: var(--palette-p700);
   --sidebar-primary: var(--palette-p700);
@@ -66,6 +76,24 @@
   --sidebar-accent-foreground: var(--palette-p700);
   --sidebar-border: color-mix(in srgb, var(--palette-p500) 22%, transparent);
   --sidebar-ring: var(--palette-p500);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --luxury-gutter: 28px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --luxury-gutter: 40px;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --luxury-gutter: 48px;
+  }
 }
 
 .dark {
@@ -148,4 +176,20 @@
 /** Тяло за избрани блокове — Source Sans 3, fallback Manrope */
 .font-source-sans-3 {
   font-family: 'Source Sans 3', 'Manrope', sans-serif;
+}
+
+/**
+ * Вариант B: Commissioner за заглавия (h1–h6) и за `<article>` карти (услуги, курсове).
+ * По-висока специфичност от `.font-source-sans-3` върху същите заглавия.
+ */
+[data-site-variant='b'] h1,
+[data-site-variant='b'] h2,
+[data-site-variant='b'] h3,
+[data-site-variant='b'] h4,
+[data-site-variant='b'] h5,
+[data-site-variant='b'] h6,
+[data-site-variant='b'] article {
+  font-family: 'Commissioner', 'Manrope', 'Source Sans 3', sans-serif;
+  /* Български локализирани глифове (locl); `lang` на елементите е bg */
+  font-feature-settings: 'locl' 1;
 }
