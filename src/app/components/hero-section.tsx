@@ -16,7 +16,7 @@ export function HeroSection({ variant = 'a' }: { variant?: HeroVariant }) {
           alt="Ивета Костадинова"
           className="h-full w-full object-cover object-center"
           decoding="async"
-          fetchPriority="high"
+          fetchpriority="high"
         />
         <div
           className={

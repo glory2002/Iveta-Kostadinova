@@ -3,14 +3,7 @@ import { ArrowRight } from 'lucide-react';
 
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SiteButton } from './site-button';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from './ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from './ui/carousel';
 import { cn } from './ui/utils';
 
 const CONSULT_URL = 'https://wa.me/359876003900';
@@ -246,6 +239,49 @@ function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' |
   );
 }
 
+function CoursesCarouselDotNav({
+  snapCount,
+  activeIndex,
+  onSelect,
+}: {
+  snapCount: number;
+  activeIndex: number;
+  onSelect: (index: number) => void;
+}) {
+  if (snapCount <= 0) return null;
+
+  return (
+    <div
+      className="mt-4 flex flex-wrap items-center justify-center md:mt-5"
+      role="group"
+      aria-label="Навигация в курсовете"
+    >
+      <div
+        className="flex max-w-[min(100%,18rem)] flex-wrap items-center justify-center gap-2 md:max-w-none md:gap-2.5"
+        role="tablist"
+        aria-label="Избор на курс"
+      >
+        {Array.from({ length: snapCount }, (_, i) => (
+          <button
+            key={i}
+            type="button"
+            role="tab"
+            aria-selected={i === activeIndex}
+            aria-label={`Курс ${i + 1} от ${snapCount}`}
+            onClick={() => onSelect(i)}
+            className={cn(
+              'rounded-full transition-[width,height,background-color,opacity] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_40%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+              i === activeIndex
+                ? 'h-2 w-2 bg-[color:color-mix(in_srgb,var(--palette-p700)_52%,transparent)]'
+                : 'h-[5px] w-[5px] bg-[color:color-mix(in_srgb,var(--palette-p700)_9%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--palette-p700)_16%,transparent)]',
+            )}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /**
  * Предстоящи курсове — Figma Iveta-Kostadinova (напр. node 3-225 секция + 3-169 карта).
  * Веднага под секцията с услугите.
@@ -255,7 +291,9 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
   const [api, setApi] = useState<CarouselApi>();
   const [desktopApi, setDesktopApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
+  const [mobileSnapCount, setMobileSnapCount] = useState(0);
   const [desktopSlide, setDesktopSlide] = useState(0);
+  const [desktopSnapCount, setDesktopSnapCount] = useState(0);
   const [progressVisible, setProgressVisible] = useState(false);
   const hideBarTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -277,25 +315,33 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
 
   useEffect(() => {
     if (!api) return;
-    const sync = () => setCurrent(api.selectedScrollSnap());
-    sync();
-    api.on('select', sync);
-    api.on('reInit', sync);
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+    const onReInit = () => {
+      setCurrent(api.selectedScrollSnap());
+      setMobileSnapCount(api.scrollSnapList().length);
+    };
+    onReInit();
+    api.on('select', onSelect);
+    api.on('reInit', onReInit);
     return () => {
-      api.off('select', sync);
-      api.off('reInit', sync);
+      api.off('select', onSelect);
+      api.off('reInit', onReInit);
     };
   }, [api]);
 
   useEffect(() => {
     if (!desktopApi) return;
-    const sync = () => setDesktopSlide(desktopApi.selectedScrollSnap());
-    sync();
-    desktopApi.on('select', sync);
-    desktopApi.on('reInit', sync);
+    const onSelect = () => setDesktopSlide(desktopApi.selectedScrollSnap());
+    const onReInit = () => {
+      setDesktopSlide(desktopApi.selectedScrollSnap());
+      setDesktopSnapCount(desktopApi.scrollSnapList().length);
+    };
+    onReInit();
+    desktopApi.on('select', onSelect);
+    desktopApi.on('reInit', onReInit);
     return () => {
-      desktopApi.off('select', sync);
-      desktopApi.off('reInit', sync);
+      desktopApi.off('select', onSelect);
+      desktopApi.off('reInit', onReInit);
     };
   }, [desktopApi]);
 
@@ -361,10 +407,16 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
                 </CarouselContent>
               </Carousel>
 
+              <CoursesCarouselDotNav
+                snapCount={mobileSnapCount}
+                activeIndex={current}
+                onSelect={(i) => api?.scrollTo(i)}
+              />
+
               <div
                 className={`w-full overflow-hidden rounded-full bg-primary/15 transition-[opacity,margin-block-start,height] duration-300 ease-out ${
                   progressVisible
-                    ? 'mt-4 h-1 opacity-100'
+                    ? 'mt-3 h-1 opacity-100'
                     : 'mt-0 h-0 opacity-0'
                 }`}
                 role="presentation"
@@ -407,25 +459,11 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
               ))}
             </CarouselContent>
 
-            <div className="mt-8 flex justify-center">
-              <div
-                className="flex items-center gap-4 md:gap-5"
-                role="group"
-                aria-label="Навигация в курсовете"
-              >
-                <CarouselPrevious
-                  variant="outline"
-                  className="static top-auto left-auto size-10 translate-x-0 translate-y-0 rounded-full border-[color:color-mix(in_srgb,var(--palette-p700)_22%,transparent)] bg-[color:var(--palette-bg-white)] text-[color:var(--palette-p700)] shadow-none hover:bg-[color:color-mix(in_srgb,var(--palette-p700)_6%,transparent)] disabled:opacity-40"
-                />
-                <span className="font-source-sans-3 min-w-[3rem] text-center text-xs tabular-nums tracking-[0.14em] text-[color:var(--palette-p700)]/55 md:text-sm">
-                  {desktopSlide + 1} / {count}
-                </span>
-                <CarouselNext
-                  variant="outline"
-                  className="static top-auto right-auto size-10 translate-x-0 translate-y-0 rounded-full border-[color:color-mix(in_srgb,var(--palette-p700)_22%,transparent)] bg-[color:var(--palette-bg-white)] text-[color:var(--palette-p700)] shadow-none hover:bg-[color:color-mix(in_srgb,var(--palette-p700)_6%,transparent)] disabled:opacity-40"
-                />
-              </div>
-            </div>
+            <CoursesCarouselDotNav
+              snapCount={desktopSnapCount}
+              activeIndex={desktopSlide}
+              onSelect={(i) => desktopApi?.scrollTo(i)}
+            />
           </Carousel>
         </div>
       </div>

@@ -1,11 +1,9 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 
-import { SiteButton } from './site-button';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { cn } from './ui/utils';
 
 interface Testimonial {
   name: string;
@@ -31,67 +29,82 @@ const testimonials: Testimonial[] = [
   {
     name: 'Александра К.',
     role: 'РЕДАКТОР, ELLE БЪЛГАРИЯ',
-    photo: 'https://i.pravatar.cc/128?img=12',
-    text: 'Нивото на прецизност е друго измерение. Посещавам студиото от седем години и всеки път е безупречно.'
+    photo: 'https://randomuser.me/api/portraits/women/31.jpg',
+    text: 'Нивото на прецизност е друго измерение. Посещавам студиото от седем години — всеки път е безупречно и усещам, че детайлът е на първо място.',
   },
   {
     name: 'Цвети Петрова',
     role: 'клиент',
-    photo: 'https://i.pravatar.cc/128?img=25',
-    text: 'За мен Ивета е истински професионалист. Ходила съм и при други дами, които правят микроблейдинг на вежди, нищо общо като качество и отношение. Бих се доверила само на нея занапред.'
+    photo: 'https://randomuser.me/api/portraits/women/44.jpg',
+    text: 'За мен Ивета е истински професионалист. Ходила съм и при други — качеството и отношението тук са на друго ниво. Доверила бих се само на нея занапред.',
   },
   {
     name: 'Мария И.',
     role: 'клиент',
-    photo: 'https://i.pravatar.cc/128?img=33',
-    text: 'Невероятен резултат! Веждите ми изглеждат абсолютно естествено.'
+    photo: 'https://randomuser.me/api/portraits/women/26.jpg',
+    text: 'Невероятен резултат: веждите ми изглеждат абсолютно естествено. Процедурата мина спокойно, а грижата не спира и след това.',
   },
   {
-    name: 'Ana D.',
+    name: 'Ана Д.',
     role: 'клиент',
-    photo: 'https://i.pravatar.cc/128?img=41',
-    text: 'Много съм доволна от резултата. Иве, супер си!'
+    photo: 'https://randomuser.me/api/portraits/women/68.jpg',
+    text: 'Много съм доволна от резултата и от атмосферата в студиото. Ивета обяснява всяка стъпка с търпение — чувствам се в сигурни ръце.',
   },
   {
     name: 'Петя Г.',
     role: 'клиент',
-    photo: 'https://i.pravatar.cc/128?img=47',
-    text: 'Процедурата беше безболезнена и резултатът надмина очакванията ми.'
+    photo: 'https://randomuser.me/api/portraits/women/52.jpg',
+    text: 'Процедурата беше безболезнена, а финалът надмина очакванията ми. Работи се чисто, прецизно и с уважение към времето ми.',
   },
   {
     name: 'Силвия К.',
     role: 'клиент',
-    photo: 'https://i.pravatar.cc/128?img=52',
-    text: 'Перфектни вежди без да губя време всяка сутрин!'
+    photo: 'https://randomuser.me/api/portraits/women/79.jpg',
+    text: 'Перфектни вежди без да губя време всяка сутрин — точно това търсех. Формата е балансирана и изглежда така, сякаш е моята форма от природата.',
   },
   {
     name: 'Десислава Т.',
     role: 'клиент',
-    photo: 'https://i.pravatar.cc/128?img=68',
-    text: 'Отлична корекция. Работи се прецизно и с голямо внимание.'
-  }
+    photo: 'https://randomuser.me/api/portraits/women/17.jpg',
+    text: 'Отлична корекция и последователно внимание. Всяко посещение е спокойно — виждам резултата и го препоръчвам сърдечно.',
+  },
 ];
 
 function TestimonialSlide({
   testimonial,
   slideIndex,
-  total
+  total,
 }: {
   testimonial: Testimonial;
   slideIndex: number;
   total: number;
 }) {
   return (
-    <div className="relative px-2 pb-2 pt-4 md:px-8 md:pb-4 md:pt-6">
-      <blockquote
-        className="font-source-sans-3 mx-auto max-w-[34rem] text-center text-[1.45rem] font-light italic leading-[1.35] text-[color:var(--palette-p700)] md:max-w-[40rem] md:text-[1.85rem] md:leading-[1.32] lg:text-[2.1rem]"
-        style={{ fontWeight: 300 }}
-      >
-        „{testimonial.text}“
-      </blockquote>
+    <div className="testimonial-inner flex min-h-0 flex-col px-3 pb-3 pt-2 md:px-10 md:pb-5 md:pt-3">
+      <div className="relative mx-auto w-full max-w-[min(44rem,94vw)]">
+        {/* Декоративни кавички — фонов слой, не част от текста */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0 select-none overflow-visible"
+          aria-hidden
+        >
+          <span className="absolute left-[-4%] top-[2%] font-serif text-[clamp(8.5rem,30vw,15.5rem)] font-normal leading-none text-[color:var(--palette-p700)] opacity-[0.14] md:left-0 md:top-[4%] md:text-[clamp(10rem,26vw,16rem)]">
+            „
+          </span>
+          <span className="absolute bottom-[6%] right-[-3%] font-serif text-[clamp(6rem,22vw,12rem)] font-normal leading-none text-[color:var(--palette-p700)] opacity-[0.1] md:bottom-[10%] md:right-0">
+            “
+          </span>
+        </div>
+        <blockquote
+          lang="bg"
+          className="font-source-sans-3 relative z-[1] mx-auto max-w-[min(40rem,90vw)] text-center text-[clamp(1.7rem,4.5vw,2.9rem)] font-light not-italic leading-[1.5] tracking-[-0.015em] text-[color:color-mix(in_srgb,var(--palette-p900)_18%,var(--palette-p700))] md:max-w-[42rem] md:text-[clamp(1.95rem,2.8vw,2.85rem)] md:leading-[1.52]"
+          style={{ fontWeight: 300 }}
+        >
+          {testimonial.text}
+        </blockquote>
+      </div>
 
-      <footer className="mt-10 flex flex-col items-center justify-center gap-3 md:mt-12 md:flex-row md:gap-4">
-        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-[color:color-mix(in_srgb,var(--palette-p700)_18%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_65%,var(--palette-bg))] shadow-[0_1px_8px_color-mix(in_srgb,var(--palette-p700)_10%,transparent)] md:h-14 md:w-14">
+      <footer className="mt-11 flex flex-col items-center justify-center gap-4 md:mt-12 md:flex-row md:gap-6">
+        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-[color:color-mix(in_srgb,var(--palette-p700)_14%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_72%,var(--palette-bg))] shadow-[0_2px_14px_color-mix(in_srgb,var(--palette-p700)_8%,transparent)] md:h-[4.25rem] md:w-[4.25rem]">
           {testimonial.photo ? (
             <ImageWithFallback
               src={testimonial.photo}
@@ -102,7 +115,7 @@ function TestimonialSlide({
             />
           ) : (
             <span
-              className="font-source-sans-3 flex h-full w-full items-center justify-center text-[13px] tabular-nums text-[color:var(--palette-p700)] md:text-sm"
+              className="font-source-sans-3 flex h-full w-full items-center justify-center text-sm tabular-nums text-[color:var(--palette-p700)] md:text-[15px]"
               style={{ fontWeight: 500 }}
               aria-hidden
             >
@@ -112,12 +125,12 @@ function TestimonialSlide({
         </div>
         <div className="text-center md:text-left">
           <p
-            className="font-source-sans-3 text-lg text-[color:var(--palette-p700)] md:text-xl"
+            className="font-source-sans-3 text-xl tracking-[0.02em] text-[color:var(--palette-p700)] md:text-2xl"
             style={{ fontWeight: 500 }}
           >
             {testimonial.name}
           </p>
-          <p className="font-source-sans-3 mt-1 text-[10px] font-normal uppercase tracking-[0.22em] text-[color:var(--palette-p700)]/65 md:mt-1.5 md:text-[11px] md:tracking-[0.26em]">
+          <p className="font-source-sans-3 mt-1.5 text-[10px] font-light uppercase leading-relaxed tracking-[0.26em] text-[color:var(--palette-p700)]/78 md:mt-2 md:text-[11px] md:tracking-[0.3em]">
             {testimonial.role ?? 'клиент'}
           </p>
         </div>
@@ -130,31 +143,106 @@ function TestimonialSlide({
   );
 }
 
+const slickEase = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+const WHEEL_THRESHOLD = 52;
+
+/** Slick задава `aria-hidden` на неактивните слайдове; ако фокусът остане там, Chrome логва предупреждение. `inert` + blur синхронизират фокуса с видимия слайд. */
+function syncSlickSlidesInert(root: HTMLElement) {
+  const ae = document.activeElement;
+  if (ae instanceof HTMLElement && root.contains(ae)) {
+    const host = ae.closest<HTMLElement>('.slick-slide');
+    if (host?.getAttribute('aria-hidden') === 'true') {
+      ae.blur();
+    }
+  }
+  for (const slide of root.querySelectorAll<HTMLElement>('.slick-slide')) {
+    slide.inert = slide.getAttribute('aria-hidden') === 'true';
+  }
+}
+
 export function TestimonialsSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef<Slider>(null);
+  const wheelAreaRef = useRef<HTMLDivElement>(null);
+  const wheelAccumRef = useRef(0);
 
   const settings = useMemo(
     () => ({
       dots: false,
       infinite: true,
-      fade: true,
-      speed: 600,
+      fade: false,
+      speed: 620,
+      cssEase: slickEase,
       slidesToShow: 1,
       slidesToScroll: 1,
+      swipe: true,
+      touchMove: true,
+      draggable: true,
+      swipeToSlide: true,
+      edgeFriction: 0.22,
       autoplay: true,
-      autoplaySpeed: 5200,
+      autoplaySpeed: 6400,
       pauseOnHover: true,
       arrows: false,
-      beforeChange: (_current: number, next: number) => setCurrentSlide(next)
+      beforeChange: (_current: number, next: number) => setCurrentSlide(next),
+      afterChange: () => {
+        const root = wheelAreaRef.current;
+        if (root) queueMicrotask(() => syncSlickSlidesInert(root));
+      },
     }),
-    []
+    [],
   );
 
   const n = testimonials.length;
 
+  useEffect(() => {
+    const root = wheelAreaRef.current;
+    if (!root) return;
+    const run = () => syncSlickSlidesInert(root);
+    run();
+    const raf = requestAnimationFrame(run);
+    const t = window.setTimeout(run, 200);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(t);
+    };
+  }, []);
+
+  useEffect(() => {
+    const el = wheelAreaRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      const absX = Math.abs(e.deltaX);
+      const absY = Math.abs(e.deltaY);
+
+      // Преобладава вертикално — оставяме скрола на страницата
+      if (absY >= absX * 1.08) {
+        wheelAccumRef.current = 0;
+        return;
+      }
+
+      if (absX < 0.5) return;
+
+      e.preventDefault();
+      wheelAccumRef.current += e.deltaX;
+
+      if (wheelAccumRef.current > WHEEL_THRESHOLD) {
+        sliderRef.current?.slickNext();
+        wheelAccumRef.current = 0;
+      } else if (wheelAccumRef.current < -WHEEL_THRESHOLD) {
+        sliderRef.current?.slickPrev();
+        wheelAccumRef.current = 0;
+      }
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
+
   return (
-    <section className="bg-[color:var(--palette-bg)] pt-16 pb-24 md:pt-24 md:pb-36">
+    <section className="bg-[color:var(--palette-bg)] pt-20 pb-28 md:pt-24 md:pb-36">
       <div className="luxury-page">
         <h2
           className="font-source-sans-3 mb-10 text-center text-3xl uppercase leading-tight tracking-tight text-foreground sm:text-4xl md:mb-14 md:text-[52px]"
@@ -163,42 +251,43 @@ export function TestimonialsSection() {
           Отзиви
         </h2>
 
-        <div className="relative mx-auto max-w-4xl">
-          <Slider {...settings} ref={sliderRef}>
-            {testimonials.map((testimonial, index) => (
-              <div key={testimonial.name + index}>
-                <TestimonialSlide testimonial={testimonial} slideIndex={index + 1} total={n} />
-              </div>
-            ))}
-          </Slider>
-
+        <div className="relative mx-auto max-w-5xl">
           <div
-            className="mt-10 flex justify-center md:mt-14"
-            role="group"
-            aria-label="Навигация в отзивите"
+            ref={wheelAreaRef}
+            className="testimonials-slick"
+            aria-describedby="testimonials-swipe-hint"
+            aria-label="Отзиви — плъзнете хоризонтално"
           >
-            <div className="flex items-center gap-4 md:gap-5">
-              <SiteButton
-                type="button"
-                variant="iconOutline"
-                onClick={() => sliderRef.current?.slickPrev()}
-                aria-label="Предишен отзив"
-                className="border-[color:color-mix(in_srgb,var(--palette-p700)_22%,transparent)] text-[color:var(--palette-p700)] hover:bg-[color:color-mix(in_srgb,var(--palette-p700)_6%,transparent)]"
-              >
-                <ArrowLeft className="size-4 shrink-0" />
-              </SiteButton>
-              <span className="font-source-sans-3 min-w-[3rem] text-center text-xs tabular-nums tracking-[0.14em] text-[color:var(--palette-p700)]/55 md:text-sm">
-                {currentSlide + 1} / {n}
-              </span>
-              <SiteButton
-                type="button"
-                variant="iconOutline"
-                onClick={() => sliderRef.current?.slickNext()}
-                aria-label="Следващ отзив"
-                className="border-[color:color-mix(in_srgb,var(--palette-p700)_22%,transparent)] text-[color:var(--palette-p700)] hover:bg-[color:color-mix(in_srgb,var(--palette-p700)_6%,transparent)]"
-              >
-                <ArrowRight className="size-4 shrink-0" />
-              </SiteButton>
+            <Slider {...settings} ref={sliderRef}>
+              {testimonials.map((testimonial, index) => (
+                <div key={testimonial.name + index}>
+                  <TestimonialSlide testimonial={testimonial} slideIndex={index + 1} total={n} />
+                </div>
+              ))}
+            </Slider>
+          </div>
+
+          <p className="sr-only" id="testimonials-swipe-hint">
+            Плъзнете хоризонтално с пръст или мишка, или с два пръста хоризонтално на тъчпада, за да смените отзива.
+          </p>
+          <div className="mt-4 flex flex-wrap items-center justify-center md:mt-5" role="group" aria-label="Навигация в отзивите">
+            <div className="flex max-w-[min(100%,18rem)] flex-wrap items-center justify-center gap-2 md:max-w-none md:gap-2.5" role="tablist" aria-label="Избор на отзив">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === currentSlide}
+                  aria-label={`Отзив ${i + 1} от ${n}`}
+                  onClick={() => sliderRef.current?.slickGoTo(i)}
+                  className={cn(
+                    'rounded-full transition-[width,height,background-color,opacity] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_40%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg)]',
+                    i === currentSlide
+                      ? 'h-2 w-2 bg-[color:color-mix(in_srgb,var(--palette-p700)_52%,transparent)]'
+                      : 'h-[5px] w-[5px] bg-[color:color-mix(in_srgb,var(--palette-p700)_9%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--palette-p700)_16%,transparent)]',
+                  )}
+                />
+              ))}
             </div>
           </div>
         </div>

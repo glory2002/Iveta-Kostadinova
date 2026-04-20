@@ -1,0 +1,25 @@
+/**
+ * Отзиви — react-slick: хоризонтално плъзгане, без дефолтен списъчен стил.
+ */
+.testimonials-slick .slick-list {
+  margin: 0;
+  padding: 0;
+  cursor: grab;
+}
+
+.testimonials-slick .slick-list:active {
+  cursor: grabbing;
+}
+
+.testimonials-slick .slick-track {
+  display: flex;
+  align-items: stretch;
+}
+
+.testimonials-slick .slick-slide {
+  height: auto;
+}
+
+.testimonials-slick .slick-slide > div {
+  height: 100%;
+}
