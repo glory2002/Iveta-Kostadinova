@@ -1,7 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
 
-import { liftSpring } from './motion-primitives';
 import { SiteButton } from './site-button';
 import { cn } from './ui/utils';
 
@@ -129,7 +127,7 @@ function CategoryColumn({
                     item.subservice ? 'text-[15px] font-light' : 'text-[16px] font-normal tracking-[0.02em]'
                   }`}
                 >
-                  <span className="block underline-offset-2 transition-[text-decoration-color] group-hover:underline group-hover:decoration-[color:color-mix(in_srgb,var(--palette-p700)_35%,transparent)]">
+                  <span className="inline-block max-w-full border-b border-transparent pb-px transition-[border-color] duration-200 ease-out group-hover:border-[color:color-mix(in_srgb,var(--palette-p700)_52%,transparent)]">
                     {item.service}
                   </span>
                   {item.serviceDetail ? (
@@ -157,21 +155,18 @@ function CategoryColumn({
 const mainCategories = priceCategories.slice(0, 3);
 const vipCategory = priceCategories[3];
 
-function VipPassBanner() {
-  const reducedMotion = useReducedMotion();
+function VipPassBanner({ variant = 'a' }: { variant?: 'a' | 'b' }) {
   const price = vipCategory?.items[0]?.price ?? '€500';
   const vipHref = whatsappInquiryUrl(
     `Здравейте! Интересувам се от VIP PASS — ${price}. Пиша от ценоразписа на сайта.`,
   );
 
   return (
-    <motion.a
+    <a
       href={vipHref}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Запитване в WhatsApp за VIP PASS"
-      whileHover={reducedMotion ? undefined : { y: -3 }}
-      transition={liftSpring}
       className="group block cursor-pointer touch-manipulation rounded-[14px] border border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_11%,var(--palette-bg-white))] bg-[color:var(--palette-bg-white)] px-5 py-7 text-inherit no-underline transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.995] active:bg-[color:color-mix(in_srgb,var(--palette-p700)_4%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)] md:px-9 md:py-9 lg:px-11 lg:py-10"
     >
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
@@ -197,12 +192,19 @@ function VipPassBanner() {
           >
             {price}
           </p>
-          <SiteButton asChild variant="outlineChocolate" className="w-full shrink-0 justify-center uppercase sm:w-auto">
+          <SiteButton
+            asChild
+            variant="outlineChocolate"
+            className={cn(
+              'w-full shrink-0 justify-center uppercase sm:w-auto',
+              variant === 'b' && '!rounded-sm',
+            )}
+          >
             <span>Запиши час</span>
           </SiteButton>
         </div>
       </div>
-    </motion.a>
+    </a>
   );
 }
 
@@ -241,7 +243,7 @@ export function PriceListSection({ variant = 'a' }: { variant?: 'a' | 'b' }) {
               ))}
             </div>
 
-            {vipCategory ? <VipPassBanner /> : null}
+            {vipCategory ? <VipPassBanner variant={variant} /> : null}
           </div>
         </div>
       </div>

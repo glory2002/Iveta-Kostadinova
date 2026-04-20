@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
 
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { liftHoverY, liftSpring } from './motion-primitives';
 import { SiteButton } from './site-button';
 import {
   Carousel,
@@ -13,6 +11,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from './ui/carousel';
+import { cn } from './ui/utils';
 
 const CONSULT_URL = 'https://wa.me/359876003900';
 
@@ -97,24 +96,50 @@ const courseTitleClass =
 const courseCardMetaLineClass =
   'min-w-0 text-sm font-normal leading-snug tracking-[0.02em] text-[color:var(--palette-p700)] md:text-[15px]';
 
+/** Дата · локация върху тъмен overlay (вариант B). */
+const courseCardMetaLineOverlayClass =
+  'min-w-0 text-sm font-normal leading-snug tracking-[0.02em] text-[color:var(--palette-bg-white)]/88 md:text-[15px]';
+
 function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' | 'b' }) {
   const isOverlayTitle = variant === 'b';
-  const reducedMotion = useReducedMotion();
 
   return (
-    <motion.article
-      whileHover={reducedMotion ? undefined : { y: liftHoverY }}
-      transition={liftSpring}
-      className={`group box-border flex min-h-0 flex-col overflow-hidden rounded-[18px] ${CARD_BORDER} ${CARD_BG_OFF_WHITE}`}
+    <article
+      className={cn(
+        `group box-border flex min-h-0 flex-col overflow-hidden ${CARD_BORDER} ${CARD_BG_OFF_WHITE}`,
+        !isOverlayTitle && 'rounded-[18px]',
+        isOverlayTitle && 'h-full',
+      )}
     >
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-t-[18px] rounded-b-2xl">
+      <div
+        className={cn(
+          'relative aspect-[4/3] w-full shrink-0 overflow-hidden',
+          !isOverlayTitle && 'rounded-t-[18px] rounded-b-2xl',
+        )}
+      >
         <ImageWithFallback
           src={course.image}
           alt={course.imageAlt}
-          className="absolute inset-0 h-full w-full rounded-t-[18px] rounded-b-2xl object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          className={cn(
+            'absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]',
+            !isOverlayTitle && 'rounded-t-[18px] rounded-b-2xl',
+          )}
+        />
+        <div
+          className={cn(
+            'pointer-events-none absolute inset-0 bg-black/28 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100',
+            !isOverlayTitle && 'rounded-t-[18px] rounded-b-2xl',
+            isOverlayTitle ? 'z-[2]' : 'z-[1]',
+          )}
+          aria-hidden
         />
         {course.meta ? (
-          <div className="pointer-events-none absolute left-2.5 top-2.5 z-[2] md:left-3 md:top-3">
+          <div
+            className={cn(
+              'pointer-events-none absolute left-2.5 top-2.5 md:left-3 md:top-3',
+              isOverlayTitle ? 'z-[3]' : 'z-[2]',
+            )}
+          >
             <p className="max-w-[min(100%,13rem)] rounded-sm border border-[color:color-mix(in_srgb,var(--palette-p700)_12%,transparent)] bg-[color:var(--palette-bg-white)] px-2 py-1 text-left text-[9px] font-normal uppercase leading-tight tracking-[0.16em] text-[color:var(--palette-p700)] shadow-sm sm:text-[10px] sm:tracking-[0.17em] md:px-2 md:py-1.5 md:text-[11px] md:tracking-[0.19em]">
               {course.meta.level}
             </p>
@@ -123,23 +148,42 @@ function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' |
         {isOverlayTitle ? (
           <>
             <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[62%] bg-gradient-to-t from-black/[0.82] via-black/38 via-[44%] to-transparent"
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[68%] bg-gradient-to-t from-black/[0.82] via-black/38 via-[44%] to-transparent"
               aria-hidden
             />
-            <h3
-              className={`absolute inset-x-0 bottom-0 z-[3] ${CARD_INNER_X} pb-4 pt-12 text-left md:pb-6 md:pt-14 ${courseTitleClass} text-[color:var(--palette-bg-white)] drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]`}
+            <div
+              className={`absolute inset-x-0 bottom-0 z-[4] flex flex-col items-start ${CARD_INNER_X} pb-4 pt-12 text-left md:pb-6 md:pt-14`}
             >
-              <span className="block">{course.title}</span>
-              {course.titleLine2 ? (
-                <span className="mt-0.5 block not-italic md:mt-0.5">{course.titleLine2}</span>
-              ) : null}
-            </h3>
+              <h3
+                className={`w-full ${courseTitleClass} text-[color:var(--palette-bg-white)] drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]`}
+              >
+                <span className="block">{course.title}</span>
+                {course.titleLine2 ? (
+                  <span className="mt-0.5 block not-italic md:mt-0.5">{course.titleLine2}</span>
+                ) : null}
+              </h3>
+              <div className="mt-2.5 flex w-full min-w-0 flex-wrap items-baseline gap-x-2 md:mt-3 md:gap-x-2.5">
+                <p className={courseCardMetaLineOverlayClass}>{course.date}</p>
+                <span
+                  className="inline-block shrink-0 translate-y-[-0.06em] text-[1.15em] font-semibold leading-none text-[color:var(--palette-bg-white)]/40 md:text-[1.1em]"
+                  aria-hidden
+                >
+                  ·
+                </span>
+                <p className={courseCardMetaLineOverlayClass}>{course.location}</p>
+              </div>
+            </div>
           </>
         ) : null}
       </div>
 
       <div
-        className={`flex w-full flex-col items-stretch justify-start ${CARD_INNER_X} pb-5 pt-5 text-left md:pb-6 md:pt-4 ${CARD_BG_OFF_WHITE}`}
+        className={cn(
+          `flex w-full flex-col items-stretch ${CARD_INNER_X} text-left ${CARD_BG_OFF_WHITE}`,
+          isOverlayTitle
+            ? 'min-h-0 flex-1 justify-center py-3 md:py-4'
+            : 'justify-start pb-5 pt-5 md:pb-6 md:pt-4',
+        )}
       >
         {/* 1. Заглавна група (при вариант B заглавието е върху снимката — тук няма дубликат) */}
         {!isOverlayTitle ? (
@@ -153,33 +197,35 @@ function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' |
           </div>
         ) : null}
 
-        {/* 3. Детайли: на един ред — дата · локация */}
-        <div
-          className={`flex w-full flex-col items-start ${!isOverlayTitle ? 'mt-4 md:mt-5' : ''}`}
-        >
-          <div className="flex w-full min-w-0 flex-wrap items-baseline gap-x-2 md:gap-x-2.5">
-            <p className={courseCardMetaLineClass}>{course.date}</p>
-            <span
-              className="inline-block shrink-0 translate-y-[-0.06em] text-[1.15em] font-semibold leading-none text-[color:var(--palette-p700)]/45 md:text-[1.1em]"
-              aria-hidden
-            >
-              ·
-            </span>
-            <p className={courseCardMetaLineClass}>{course.location}</p>
+        {/* 3. Детайли: на един ред — дата · локация (при B са върху снимката под заглавието) */}
+        {!isOverlayTitle ? (
+          <div className="mt-4 flex w-full flex-col items-start md:mt-5">
+            <div className="flex w-full min-w-0 flex-wrap items-baseline gap-x-2 md:gap-x-2.5">
+              <p className={courseCardMetaLineClass}>{course.date}</p>
+              <span
+                className="inline-block shrink-0 translate-y-[-0.06em] text-[1.15em] font-semibold leading-none text-[color:var(--palette-p700)]/45 md:text-[1.1em]"
+                aria-hidden
+              >
+                ·
+              </span>
+              <p className={courseCardMetaLineClass}>{course.location}</p>
+            </div>
           </div>
-        </div>
+        ) : null}
 
-        <hr
-          className="mt-6 mb-5 w-full border-0 border-t border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_10%,transparent)] md:mt-7 md:mb-6"
-          aria-hidden
-        />
+        {!isOverlayTitle ? (
+          <hr
+            className="mt-6 mb-5 w-full border-0 border-t border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_10%,transparent)] md:mt-7 md:mb-6"
+            aria-hidden
+          />
+        ) : null}
 
         {/* 4. CTA */}
-        <div className="flex w-full justify-start">
+        <div className="flex w-full justify-end">
           <SiteButton
             asChild
             variant="outlineChocolate"
-            className="group/btn inline-flex items-center gap-2 bg-[color:var(--palette-bg-white)] px-0 uppercase ring-0 ring-offset-0 transition-[text-decoration,transform] duration-200 hover:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 group-hover:underline group-hover:decoration-1 group-hover:underline-offset-[0.22em]"
+            className="group/btn inline-flex items-center gap-2 bg-[color:var(--palette-bg-white)] px-0 !py-0 uppercase ring-0 ring-offset-0 transition-[text-decoration,transform] duration-200 hover:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 group-hover:underline group-hover:decoration-1 group-hover:underline-offset-[0.22em]"
           >
             <a
               href={CONSULT_URL}
@@ -196,7 +242,7 @@ function CourseCard({ course, variant = 'a' }: { course: Course; variant?: 'a' |
           </SiteButton>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
@@ -298,11 +344,16 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
                 className="w-full"
                 aria-label="Предстоящи курсове — карусел"
               >
-                <CarouselContent className="ml-0 gap-3 pl-0">
+                <CarouselContent
+                  className={cn('ml-0 gap-3 pl-0', variant === 'b' && 'items-stretch')}
+                >
                   {courses.map((course, index) => (
                     <CarouselItem
                       key={`${course.title}-${course.date}-${index}`}
-                      className="min-w-0 shrink-0 grow-0 basis-[88%] pl-0"
+                      className={cn(
+                        'min-w-0 shrink-0 grow-0 basis-[88%] pl-0',
+                        variant === 'b' && 'flex h-full flex-col',
+                      )}
                     >
                       <CourseCard course={course} variant={variant} />
                     </CarouselItem>
@@ -340,11 +391,16 @@ export function UpcomingCoursesSection({ variant = 'a' }: { variant?: 'a' | 'b' 
             className="w-full"
             aria-label="Предстоящи курсове — карусел"
           >
-            <CarouselContent className="-ml-0 ml-0 gap-6">
+            <CarouselContent
+              className={cn('-ml-0 ml-0 gap-6', variant === 'b' && 'items-stretch')}
+            >
               {courses.map((course, index) => (
                 <CarouselItem
                   key={`desktop-${course.title}-${course.date}-${index}`}
-                  className="min-w-0 shrink-0 grow-0 basis-[calc((100%-3rem)/3)] pl-0"
+                  className={cn(
+                    'min-w-0 shrink-0 grow-0 basis-[calc((100%-3rem)/3)] pl-0',
+                    variant === 'b' && 'flex h-full flex-col',
+                  )}
                 >
                   <CourseCard course={course} variant={variant} />
                 </CarouselItem>

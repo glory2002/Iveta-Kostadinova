@@ -3,19 +3,27 @@ import { Link } from 'react-router';
 import { Menu, X } from 'lucide-react';
 
 import { SiteButton } from './site-button';
+import { cn } from './ui/utils';
 
 const CONSULT_URL = 'https://wa.me/359876003900';
 
 export type HeaderVariant = 'a' | 'b';
 
 /** Header — вариант A: навигация надясно. Вариант B: навигация центрирана (макет клиент). */
+type HeaderScrollState = { solid: boolean; visible: boolean };
+
 export function Header({ variant = 'a' }: { variant?: HeaderVariant }) {
   /** Най-горе: прозрачен бар. След скрол надолу (>50px): off-white лента. */
-  const [solidHeader, setSolidHeader] = useState(false);
+  const [scrollState, setScrollState] = useState<HeaderScrollState>({
+    solid: false,
+    visible: true,
+  });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
   const prevScrollYRef = useRef(0);
   const scrollRafRef = useRef(0);
+
+  const solidHeader = scrollState.solid;
+  const isVisible = scrollState.visible;
 
   useEffect(() => {
     prevScrollYRef.current = window.scrollY;
@@ -27,15 +35,21 @@ export function Header({ variant = 'a' }: { variant?: HeaderVariant }) {
         const y = window.scrollY;
         const prev = prevScrollYRef.current;
 
-        setSolidHeader(y > 50);
+        const solid = y > 50;
+        let visible: boolean;
+        if (y < 50) visible = true;
+        else if (y > prev) visible = false;
+        else visible = true;
 
-        if (y < 50) {
-          setIsVisible(true);
-        } else if (y > prev) {
-          setIsVisible(false);
-          setIsMobileMenuOpen(false);
-        } else {
-          setIsVisible(true);
+        setScrollState((prevState) => {
+          if (prevState.solid === solid && prevState.visible === visible) {
+            return prevState;
+          }
+          return { solid, visible };
+        });
+
+        if (y > prev && y >= 50) {
+          setIsMobileMenuOpen((open) => (open ? false : open));
         }
 
         prevScrollYRef.current = y;
@@ -69,7 +83,7 @@ export function Header({ variant = 'a' }: { variant?: HeaderVariant }) {
   return (
     <header
       role="banner"
-      className={`fixed top-0 right-0 left-0 z-50 transition-[transform,background,border-color,box-shadow,backdrop-filter] duration-300 ${headerSurface} ${
+      className={`fixed top-0 right-0 left-0 z-50 transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out ${headerSurface} ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
@@ -137,7 +151,11 @@ export function Header({ variant = 'a' }: { variant?: HeaderVariant }) {
               </nav>
             ) : null}
 
-            <SiteButton asChild variant="fillChocolate" className="hidden shrink-0 md:inline-flex">
+            <SiteButton
+              asChild
+              variant="fillChocolate"
+              className={cn('hidden shrink-0 md:inline-flex', variant === 'b' && '!rounded-sm')}
+            >
               <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer">
                 Безплатна консултация
               </a>
@@ -190,7 +208,11 @@ export function Header({ variant = 'a' }: { variant?: HeaderVariant }) {
           >
             За мен
           </a>
-          <SiteButton asChild variant="fillChocolate" className="mt-4 w-full">
+          <SiteButton
+            asChild
+            variant="fillChocolate"
+            className={cn('mt-4 w-full', variant === 'b' && '!rounded-sm')}
+          >
             <a
               href={CONSULT_URL}
               target="_blank"

@@ -77,73 +77,44 @@ export function Footer() {
       className="border-t border-primary/25 bg-[color:var(--palette-p900)] py-12 text-left md:py-20"
     >
       <div className="luxury-page">
-        <div className="flex flex-col gap-12 md:flex-row md:items-start md:gap-10 lg:gap-14">
-          {/* Ляво: марка + социални */}
-          <div className="flex shrink-0 flex-col items-start gap-6 md:max-w-[20rem] md:gap-8">
-            <div className="flex flex-col items-start gap-3 md:gap-4">
-              {/* Като хедъра: един ред — лого + PHI.BG */}
-              <div className="flex items-center gap-2.5 md:gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center md:h-11 md:w-11">
-                  <img
-                    src="https://static.wixstatic.com/media/4de890_96ec563965c84123a035a64c11346816~mv2.png/v1/fill/w_118,h_162,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/phi_logo_gold_cropped.png"
-                    alt="Phi Logo"
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-                <a
-                  href="https://phi.bg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-source-sans-3 truncate text-base tracking-[0.22em] text-[color:var(--palette-bg-white)] transition-opacity hover:opacity-90 md:text-lg lg:text-xl"
-                  style={{ fontWeight: 500 }}
-                >
-                  PHI.BG
-                </a>
+        <div className="flex flex-col gap-12 md:flex-row md:items-stretch md:gap-10 lg:gap-14">
+          {/* Ляво: лого горе, име + подзаглавие долу — на една хоризонтал с реда бутони в „Контакт“ */}
+          <div className="flex min-h-0 w-full shrink-0 flex-col items-start gap-6 md:max-w-[20rem] md:justify-between md:gap-0">
+            {/* Като хедъра: лого + PHI.BG */}
+            <div className="flex items-center gap-2.5 md:gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center md:h-11 md:w-11">
+                <img
+                  src="https://static.wixstatic.com/media/4de890_96ec563965c84123a035a64c11346816~mv2.png/v1/fill/w_118,h_162,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/phi_logo_gold_cropped.png"
+                  alt="Phi Logo"
+                  className="h-full w-full object-contain"
+                />
               </div>
-              <p className="font-source-sans-3 text-2xl font-light uppercase leading-[1.15] tracking-[0.055em] text-[color:var(--palette-bg-white)] md:text-3xl md:tracking-[0.065em] lg:text-4xl lg:tracking-[0.075em]">
+              <a
+                href="https://phi.bg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-source-sans-3 truncate text-base tracking-[0.22em] text-[color:var(--palette-bg-white)] transition-opacity hover:opacity-90 md:text-lg lg:text-xl"
+                style={{ fontWeight: 500 }}
+              >
+                PHI.BG
+              </a>
+            </div>
+            <div className="flex flex-col items-start gap-3 md:gap-4">
+              <p className="font-source-sans-3 text-xl font-light uppercase leading-[1.15] tracking-[0.05em] text-[color:var(--palette-bg-white)] md:text-2xl md:tracking-[0.058em] lg:text-3xl lg:tracking-[0.068em]">
                 Ивета Костадинова
               </p>
               <p
-                className="font-source-sans-3 text-sm font-normal uppercase leading-snug tracking-[0.16em] text-[color:var(--palette-bg-white)]/85 md:text-base md:tracking-[0.18em] lg:text-lg lg:tracking-[0.2em]"
+                className="font-source-sans-3 text-xs font-normal uppercase leading-snug tracking-[0.14em] text-[color:var(--palette-bg-white)]/85 md:text-sm md:tracking-[0.16em] lg:text-base lg:tracking-[0.18em]"
                 style={{ fontWeight: 300 }}
               >
                 PMU Expert · est. 2015
               </p>
             </div>
-            <div className="flex items-center gap-3 md:gap-4">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--palette-bg-white)_14%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_6%,transparent)] text-[color:var(--palette-bg-white)]/78 transition-[background-color,border-color,color,transform] duration-300 hover:border-[color:color-mix(in_srgb,var(--palette-bg-white)_28%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--palette-bg-white)_12%,transparent)] hover:text-[color:var(--palette-bg-white)] active:scale-[0.96]"
-                aria-label="Facebook"
-              >
-                <Facebook className="h-[15px] w-[15px]" strokeWidth={1.65} />
-              </a>
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--palette-bg-white)_14%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_6%,transparent)] text-[color:var(--palette-bg-white)]/78 transition-[background-color,border-color,color,transform] duration-300 hover:border-[color:color-mix(in_srgb,var(--palette-bg-white)_28%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--palette-bg-white)_12%,transparent)] hover:text-[color:var(--palette-bg-white)] active:scale-[0.96]"
-                aria-label={`Instagram ${INSTAGRAM_HANDLE}`}
-              >
-                <Instagram className="h-[15px] w-[15px]" strokeWidth={1.65} />
-              </a>
-              <a
-                href="https://wa.me/359876003900"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--palette-bg-white)_14%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_6%,transparent)] text-[color:var(--palette-bg-white)]/78 transition-[background-color,border-color,color,transform] duration-300 hover:border-[color:color-mix(in_srgb,var(--palette-bg-white)_28%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--palette-bg-white)_12%,transparent)] hover:text-[color:var(--palette-bg-white)] active:scale-[0.96]"
-                aria-label="WhatsApp"
-              >
-                <Phone className="h-[15px] w-[15px]" strokeWidth={1.65} />
-              </a>
-            </div>
           </div>
 
           {/* Четири колони: навигация · студио · часове · контакт — подравнени вдясно */}
-          <div className="flex min-w-0 w-full flex-1 justify-end md:items-start">
-            <div className="grid w-full grid-cols-1 gap-10 sm:w-auto sm:max-w-5xl sm:grid-cols-2 sm:gap-8 md:grid-cols-4 md:gap-8 lg:gap-10">
+          <div className="flex min-h-0 min-w-0 w-full flex-1 justify-end md:items-stretch">
+            <div className="grid w-full grid-cols-1 gap-10 sm:w-auto sm:max-w-5xl sm:grid-cols-2 sm:gap-8 md:grid-cols-4 md:items-stretch md:gap-8 lg:gap-10">
             <nav className="font-source-sans-3" aria-label="Футър навигация">
               <FooterColHeading>НАВИГАЦИЯ</FooterColHeading>
               <ul className="mt-4 space-y-2.5">
@@ -202,7 +173,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="font-source-sans-3">
+            <div className="font-source-sans-3 flex h-full min-h-0 min-w-0 flex-col">
               <FooterColHeading>КОНТАКТ</FooterColHeading>
               <div className="mt-4 space-y-2">
                 <p style={{ fontWeight: 300 }}>
@@ -231,6 +202,39 @@ export function Footer() {
                     {INSTAGRAM_HANDLE}
                   </a>
                 </p>
+              </div>
+              <div
+                role="group"
+                className="mt-6 flex items-center gap-3 md:mt-auto md:pt-6 md:gap-4"
+                aria-label="Социални мрежи"
+              >
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--palette-bg-white)_14%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_6%,transparent)] text-[color:var(--palette-bg-white)]/78 transition-[background-color,border-color,color,transform] duration-300 hover:border-[color:color-mix(in_srgb,var(--palette-bg-white)_28%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--palette-bg-white)_12%,transparent)] hover:text-[color:var(--palette-bg-white)] active:scale-[0.96]"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="h-[15px] w-[15px]" strokeWidth={1.65} />
+                </a>
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--palette-bg-white)_14%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_6%,transparent)] text-[color:var(--palette-bg-white)]/78 transition-[background-color,border-color,color,transform] duration-300 hover:border-[color:color-mix(in_srgb,var(--palette-bg-white)_28%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--palette-bg-white)_12%,transparent)] hover:text-[color:var(--palette-bg-white)] active:scale-[0.96]"
+                  aria-label={`Instagram ${INSTAGRAM_HANDLE}`}
+                >
+                  <Instagram className="h-[15px] w-[15px]" strokeWidth={1.65} />
+                </a>
+                <a
+                  href="https://wa.me/359876003900"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--palette-bg-white)_14%,transparent)] bg-[color:color-mix(in_srgb,var(--palette-bg-white)_6%,transparent)] text-[color:var(--palette-bg-white)]/78 transition-[background-color,border-color,color,transform] duration-300 hover:border-[color:color-mix(in_srgb,var(--palette-bg-white)_28%,transparent)] hover:bg-[color:color-mix(in_srgb,var(--palette-bg-white)_12%,transparent)] hover:text-[color:var(--palette-bg-white)] active:scale-[0.96]"
+                  aria-label="WhatsApp"
+                >
+                  <Phone className="h-[15px] w-[15px]" strokeWidth={1.65} />
+                </a>
               </div>
             </div>
             </div>

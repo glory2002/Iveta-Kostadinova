@@ -1,7 +1,4 @@
-import { motion, useReducedMotion } from 'motion/react';
-
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { liftHoverY, liftSpring } from './motion-primitives';
 import { SiteButton } from './site-button';
 
 interface Service {
@@ -47,8 +44,6 @@ const services: Service[] = [
 export type ServicesVariant = 'a' | 'b';
 
 export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }) {
-  const reducedMotion = useReducedMotion();
-
   if (variant === 'b') {
     return (
       <section
@@ -58,17 +53,19 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
         <div className="luxury-page box-border w-full min-w-0">
           <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-4 md:gap-3">
             {services.map((service, index) => (
-              <motion.article
+              <article
                 key={index}
-                whileHover={reducedMotion ? undefined : { y: liftHoverY }}
-                transition={liftSpring}
-                className="group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-transparent"
+                className="group flex min-w-0 flex-col overflow-hidden bg-transparent"
               >
-                <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-2xl">
+                <div className="relative aspect-square w-full shrink-0 overflow-hidden">
                   <ImageWithFallback
                     src={service.image}
                     alt={service.title}
-                    className="absolute inset-0 h-full w-full rounded-2xl object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.08]"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0 z-[1] bg-black/28 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
+                    aria-hidden
                   />
                 </div>
                 <div className="flex flex-1 flex-col items-start justify-start pb-1 pt-3 text-left sm:pb-2 sm:pt-4 md:pb-5 md:pt-5">
@@ -79,14 +76,18 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
                     {service.titleEn}
                   </p>
                   <div className="mt-auto w-full pt-3 sm:pt-[18px] md:pt-5">
-                    <SiteButton asChild variant="fillChocolate" className="w-full min-w-0 sm:w-fit">
+                    <SiteButton
+                      asChild
+                      variant="fillChocolate"
+                      className="w-full min-w-0 sm:w-fit !rounded-sm"
+                    >
                       <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer">
                         {service.buttonText}
                       </a>
                     </SiteButton>
                   </div>
                 </div>
-              </motion.article>
+              </article>
             ))}
           </div>
         </div>
@@ -101,17 +102,19 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
     >
       <div className="relative z-10 luxury-page -mt-10 grid grid-cols-12 gap-3 md:-mt-14 lg:-mt-[4.5rem]">
         {services.map((service, index) => (
-          <motion.article
+          <article
             key={index}
-            whileHover={reducedMotion ? undefined : { y: liftHoverY }}
-            transition={liftSpring}
             className="group col-span-6 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl bg-[color:var(--palette-bg-white)] shadow-[0_8px_28px_-14px_rgba(43,32,24,0.2)] md:col-span-12 md:min-h-[300px] md:flex-row md:rounded-[18px] md:shadow-none lg:col-span-6 lg:min-h-[320px]"
           >
             <div className="relative aspect-[5/4] w-full shrink-0 overflow-hidden rounded-l-[18px] rounded-r-2xl md:aspect-auto md:h-full md:min-h-full md:w-1/2 md:self-stretch">
               <ImageWithFallback
                 src={service.image}
                 alt={service.title}
-                className="absolute inset-0 h-full w-full rounded-l-[18px] rounded-r-2xl object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                className="absolute inset-0 z-0 h-full w-full rounded-l-[18px] rounded-r-2xl object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+              />
+              <div
+                className="pointer-events-none absolute inset-0 z-[1] rounded-l-[18px] rounded-r-2xl bg-black/28 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
+                aria-hidden
               />
             </div>
             <div className="flex w-full min-w-0 flex-1 flex-col items-center justify-start px-3 pb-5 pt-4 text-center sm:px-4 sm:pb-5 sm:pt-4 md:w-1/2 md:items-start md:px-8 md:pb-10 md:pt-10 md:text-left lg:px-10 lg:py-12">
@@ -131,7 +134,7 @@ export function ServicesSection({ variant = 'a' }: { variant?: ServicesVariant }
                 </SiteButton>
               </div>
             </div>
-          </motion.article>
+          </article>
         ))}
       </div>
     </section>
