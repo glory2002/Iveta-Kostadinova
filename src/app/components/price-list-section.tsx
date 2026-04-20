@@ -124,7 +124,9 @@ function CategoryColumn({
               >
                 <span
                   className={`min-w-0 flex-1 leading-relaxed ${
-                    item.subservice ? 'text-[15px] font-light' : 'text-[16px] font-normal tracking-[0.02em]'
+                    item.subservice
+                      ? 'text-[16px] font-light md:text-[17px]'
+                      : 'text-[17px] font-normal tracking-[0.02em] md:text-[18px]'
                   }`}
                 >
                   <span className="inline-block max-w-full border-b border-transparent pb-px transition-[border-color] duration-200 ease-out group-hover:border-[color:color-mix(in_srgb,var(--palette-p700)_52%,transparent)]">
@@ -167,7 +169,7 @@ function VipPassBanner({ variant = 'a' }: { variant?: 'a' | 'b' }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Запитване в WhatsApp за VIP PASS"
-      className="group block cursor-pointer touch-manipulation rounded-[14px] border border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_11%,var(--palette-bg-white))] bg-[color:var(--palette-bg-white)] px-5 py-7 text-inherit no-underline transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.995] active:bg-[color:color-mix(in_srgb,var(--palette-p700)_4%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)] md:px-9 md:py-9 lg:px-11 lg:py-10"
+      className="group block cursor-pointer touch-manipulation rounded-[14px] border border-solid border-[color:color-mix(in_srgb,var(--palette-p700)_11%,#ffffff)] bg-[#ffffff] px-5 py-7 text-inherit no-underline transition-[background-color,transform,box-shadow] duration-150 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.995] active:bg-[color:color-mix(in_srgb,var(--palette-p700)_4%,#ffffff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:color-mix(in_srgb,var(--palette-p500)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--palette-bg-white)] md:px-9 md:py-9 lg:px-11 lg:py-10"
     >
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
         <div className="min-w-0 flex-1">
